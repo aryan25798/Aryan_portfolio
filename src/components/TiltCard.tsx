@@ -46,7 +46,7 @@ export default function TiltCard({ children, className = "", intensity = 8 }: Pr
       className="perspective-1000"
     >
       <motion.div
-        animate={isTouch ? {} : { rotateX: rotate.x, rotateY: rotate.y }}
+        animate={isTouch ? { rotateX: 0, rotateY: 0 } : { rotateX: rotate.x, rotateY: rotate.y }}
         transition={{ type: "spring", stiffness: 200, damping: 20 }}
         className={`relative overflow-hidden group ${className}`}
         style={{ transformStyle: "preserve-3d", willChange: isTouch ? "auto" : "transform" }}

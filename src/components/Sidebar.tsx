@@ -64,8 +64,8 @@ export default function Sidebar({ activePage, setActivePage, onMenuToggle }: Pro
             aria-label={item.label}
           >
             <motion.span
-              animate={activePage === item.id ? { scale: [1, 1.1, 1] } : {}}
-              transition={{ duration: 2, repeat: Infinity }}
+              animate={activePage === item.id ? { scale: [1, 1.1, 1] } : { scale: 1 }}
+              transition={{ duration: 2, repeat: activePage === item.id ? Infinity : 0 }}
             >
               {item.icon}
             </motion.span>

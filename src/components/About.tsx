@@ -3,7 +3,6 @@
 import { motion } from "framer-motion";
 import { Award, GraduationCap, Calendar, Code, Server, Cloud, Database, GitBranch, Cpu, Star, MapPin, Download } from "lucide-react";
 import confetti from "canvas-confetti";
-import Image from "next/image";
 import { useGitHub } from "@/lib/useGitHub";
 import TiltCard from "./TiltCard";
 import AnimatedCounter from "./AnimatedCounter";
@@ -38,13 +37,11 @@ export default function About() {
           <TiltCard intensity={5} className="w-full max-w-[260px] xs:max-w-[300px] sm:max-w-[340px] md:max-w-full">
             <div className="relative overflow-hidden rounded-2xl border border-white/10 bg-gradient-to-br from-purple-500/10 via-transparent to-cyan-500/5">
               <div className="absolute inset-0 bg-gradient-to-t from-[#050816] via-transparent to-transparent z-10" />
-              <Image
+              {/* eslint-disable-next-line @next/next/no-img-element */}
+              <img
                 src="/assets/headshot_transparent.png"
                 alt="Aryan"
-                width={1024}
-                height={967}
                 className="w-full h-auto object-cover scale-105 hover:scale-110 transition-transform duration-700"
-                priority
               />
               <div className="absolute bottom-0 left-0 right-0 z-20 p-3 sm:p-4 bg-gradient-to-t from-[#050816]/90 to-transparent">
                 <h3 className="font-display font-bold text-base sm:text-lg text-white">Aryan</h3>

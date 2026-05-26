@@ -11,8 +11,8 @@ export async function GET() {
       fetchContributions(),
     ]);
 
-    const langStats = fetchLangStats(repos);
-    const totalStars = fetchTotalStars(repos);
+    const langStats = await fetchLangStats(repos);
+    const totalStars = await fetchTotalStars(repos);
 
     return NextResponse.json({
       user,
