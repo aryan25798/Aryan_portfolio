@@ -452,17 +452,18 @@ export default function Home({ setActivePage }: Props) {
 
               <div className="grid grid-cols-4 xs:grid-cols-5 sm:grid-cols-7 lg:grid-cols-4 xl:grid-cols-7 gap-1.5 sm:gap-3 w-full">
                 {[
-                  { name: "Next.js", init: "N", col: "text-white" },
-                  { name: "React", init: "RT", col: "text-cyan-400" },
-                  { name: "TypeScript", init: "TS", col: "text-blue-400" },
-                  { name: "Node.js", init: "ND", col: "text-green-400" },
-                  { name: "MongoDB", init: "MG", col: "text-emerald-500" },
-                  { name: "Tailwind", init: "TW", col: "text-cyan-300" },
-                  { name: "AWS", init: "WS", col: "text-orange-400" },
+                  { name: "Next.js", slug: "nextdotjs" },
+                  { name: "React", slug: "react" },
+                  { name: "TypeScript", slug: "typescript" },
+                  { name: "Node.js", slug: "nodedotjs" },
+                  { name: "MongoDB", slug: "mongodb" },
+                  { name: "Tailwind CSS", slug: "tailwindcss" },
+                  { name: "AWS", slug: "amazonwebservices" },
                 ].map((tech, idx) => (
                   <div key={idx} className="flex flex-col items-center gap-1 group/tile">
-                    <div className="w-9 h-9 xs:w-10 xs:h-10 sm:w-12 sm:h-12 rounded-xl bg-black/60 border border-white/10 flex items-center justify-center font-display font-black text-[10px] xs:text-[11px] sm:text-xs tracking-wider transition-all duration-300 group-hover/tile:scale-110 group-hover/tile:border-purple-500/40 group-hover/tile:-translate-y-1 shadow-lg">
-                      <span className={tech.col}>{tech.init}</span>
+                    <div className="w-9 h-9 xs:w-10 xs:h-10 sm:w-12 sm:h-12 rounded-xl bg-black/60 border border-white/10 flex items-center justify-center transition-all duration-300 group-hover/tile:scale-110 group-hover/tile:border-purple-500/40 group-hover/tile:-translate-y-1 group-hover/tile:shadow-[0_0_20px_rgba(124,58,237,0.3)] shadow-lg">
+                      {/* eslint-disable-next-line @next/next/no-img-element */}
+                      <img src={`https://cdn.simpleicons.org/${tech.slug}/white`} alt={tech.name} className="w-5 h-5 sm:w-6 sm:h-6" loading="lazy" />
                     </div>
                     <span className="text-[9px] xs:text-[9px] sm:text-[9px] font-bold text-text-secondary uppercase tracking-wider group-hover/tile:text-white transition-colors text-center leading-tight">{tech.name}</span>
                   </div>
