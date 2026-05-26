@@ -4,7 +4,6 @@ import { motion } from "framer-motion";
 import { Award, GraduationCap, Calendar, Code, Server, Cloud, Database, GitBranch, Cpu, Star, MapPin, Download } from "lucide-react";
 import confetti from "canvas-confetti";
 import Image from "next/image";
-import headshot from "../../public/assets/headshot_transparent.png";
 import { useGitHub } from "@/lib/useGitHub";
 import TiltCard from "./TiltCard";
 import AnimatedCounter from "./AnimatedCounter";
@@ -40,8 +39,10 @@ export default function About() {
             <div className="relative overflow-hidden rounded-2xl border border-white/10 bg-gradient-to-br from-purple-500/10 via-transparent to-cyan-500/5">
               <div className="absolute inset-0 bg-gradient-to-t from-[#050816] via-transparent to-transparent z-10" />
               <Image
-                src={headshot}
+                src="/assets/headshot_transparent.png"
                 alt="Aryan"
+                width={1024}
+                height={967}
                 className="w-full h-auto object-cover scale-105 hover:scale-110 transition-transform duration-700"
                 priority
               />
