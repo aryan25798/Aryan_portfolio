@@ -95,8 +95,12 @@ export default function Header({ activePage, setActivePage, mobileMenuOpen, onMe
         {mobileMenuOpen && (
           <motion.div
             initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }}
-            className="fixed inset-0 z-30 bg-[#050816]/98 backdrop-blur-2xl lg:hidden flex flex-col justify-center items-center px-4"
+            className="fixed inset-0 z-30 bg-[#050816]/98 backdrop-blur-2xl lg:hidden flex flex-col justify-center items-center px-4 overflow-hidden"
           >
+            {/* Premium futuristic glowing background blobs */}
+            <div className="absolute top-[15%] left-[-20%] w-[250px] h-[250px] rounded-full bg-purple-500/15 blur-[80px] pointer-events-none animate-pulse-slow" />
+            <div className="absolute bottom-[15%] right-[-20%] w-[250px] h-[250px] rounded-full bg-cyan-500/10 blur-[80px] pointer-events-none animate-pulse-slow" style={{ animationDelay: "2s" }} />
+
             <motion.nav
               variants={container}
               initial="hidden"

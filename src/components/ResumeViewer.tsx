@@ -105,12 +105,37 @@ export default function ResumeViewer({ open, onClose }: Props) {
               </div>
             </div>
 
-            <iframe
-              src="/assets/Aryan_Resume.pdf#view=FitH"
-              className="relative w-full flex-1 rounded-2xl"
-              style={{ border: "none", height: "calc(100% - 53px)" }}
-              title="Aryan Resume"
-            />
+            {typeof window !== "undefined" && window.innerWidth < 768 ? (
+              <div className="relative w-full flex-1 flex flex-col items-center justify-center p-6 text-center" style={{ height: "calc(100% - 53px)" }}>
+                <div className="w-16 h-16 rounded-full bg-gradient-to-br from-purple-500/20 to-cyan-500/20 border border-purple-500/30 flex items-center justify-center mb-5 animate-pulse shadow-[0_0_30px_rgba(124,58,237,0.2)]">
+                  <svg viewBox="0 0 24 24" width="28" height="28" fill="none" stroke="#a78bfa" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                    <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z" />
+                    <polyline points="14 2 14 8 20 8" />
+                    <line x1="16" y1="13" x2="8" y2="13" />
+                    <line x1="16" y1="17" x2="8" y2="17" />
+                    <polyline points="10 9 9 9 8 9" />
+                  </svg>
+                </div>
+                <h4 className="font-display font-black text-base text-white leading-tight mb-2">Resume Ready to Download</h4>
+                <p className="text-[11px] text-text-secondary leading-relaxed max-w-xs mb-6">
+                  For the best viewing experience on mobile devices, please download the resume directly.
+                </p>
+                <a
+                  href="/assets/Aryan_Resume.pdf"
+                  download="Aryan_Resume.pdf"
+                  className="btn-primary py-3 px-8 text-xs font-semibold uppercase tracking-wider inline-flex items-center gap-2"
+                >
+                  <Download className="w-4 h-4" /> Download PDF Resume
+                </a>
+              </div>
+            ) : (
+              <iframe
+                src="/assets/Aryan_Resume.pdf#view=FitH"
+                className="relative w-full flex-1 rounded-2xl"
+                style={{ border: "none", height: "calc(100% - 53px)" }}
+                title="Aryan Resume"
+              />
+            )}
           </motion.div>
         </motion.div>
       )}

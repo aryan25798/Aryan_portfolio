@@ -48,14 +48,14 @@ function ProjectCard({ repo }: { repo: GithubRepo }) {
   return (
     <motion.div variants={cardUp} className="h-full">
       <TiltCard intensity={4}>
-        <a href={repo.html_url} target="_blank" rel="noopener noreferrer" className="block h-full group/card">
+        <div className="block h-full group/card relative">
           <div className={`glass-card-glow h-full relative overflow-hidden bg-gradient-to-br ${CARD_BGS[repo.language || ""] || "from-purple-700/20 via-purple-600/5"} to-transparent`}>
             <div className="absolute -top-24 -right-24 w-48 h-48 opacity-0 group-hover/card:opacity-100 transition-opacity duration-700 pointer-events-none"
               style={{ background: `radial-gradient(circle, ${langColor}18 0%, transparent 60%)` }}
             />
 
             {/* Preview area */}
-            <div className="relative h-28 sm:h-32 lg:h-36 overflow-hidden">
+            <a href={repo.html_url} target="_blank" rel="noopener noreferrer" className="block relative h-28 sm:h-32 lg:h-36 overflow-hidden">
               <div className="absolute inset-0 transition-transform duration-700 group-hover/card:scale-105"
                 style={{ background: `linear-gradient(160deg, ${langColor}30 0%, ${langColor}08 40%, transparent 65%)` }}
               />
@@ -78,7 +78,7 @@ function ProjectCard({ repo }: { repo: GithubRepo }) {
                 </span>
                 {repo.homepage && (
                   <span className="text-[7px] font-bold text-emerald-400 bg-emerald-500/15 border border-emerald-500/25 px-2 py-0.5 rounded-full backdrop-blur-sm flex items-center gap-1">
-                    <span className="w-1 h-1 rounded-full bg-emerald-400 animate-pulse" />
+                    <span className="w-1.5 h-1.5 rounded-full bg-emerald-400 animate-pulse" />
                     Live
                   </span>
                 )}
@@ -89,7 +89,7 @@ function ProjectCard({ repo }: { repo: GithubRepo }) {
                   {repo.name.replace(/[-_]/g, " ")}
                 </h3>
               </div>
-            </div>
+            </a>
 
             {/* Body */}
             <div className="p-3 sm:p-4 flex flex-col gap-2">
@@ -122,12 +122,12 @@ function ProjectCard({ repo }: { repo: GithubRepo }) {
 
               <div className="flex items-center justify-between pt-2 border-t border-white/5 mt-auto">
                 <div className="flex items-center gap-2">
-                  <div className="flex items-center gap-1 px-2 py-1 rounded-md bg-white/5 border border-white/10 text-text-secondary hover:text-white hover:border-purple-500/40 transition-all cursor-pointer">
+                  <a href={repo.html_url} target="_blank" rel="noopener noreferrer" className="flex items-center gap-1 px-2 py-1 rounded-md bg-white/5 border border-white/10 text-text-secondary hover:text-white hover:border-purple-500/40 transition-all cursor-pointer">
                     <svg viewBox="0 0 24 24" width="11" height="11" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M9 19c-5 1.5-5-2.5-7-3m14 6v-3.87a3.37 3.37 0 0 0-.94-2.61c3.14-.35 6.44-1.54 6.44-7A5.44 5.44 0 0 0 20 4.77 5.07 5.07 0 0 0 19.91 1S18.73.65 16 2.48a13.38 13.38 0 0 0-7 0C6.27.65 5.09 1 5.09 1A5.07 5.07 0 0 0 5 4.77a5.44 5.44 0 0 0-1.5 3.78c0 5.42 3.3 6.61 6.44 7A3.37 3.37 0 0 0 9 18.13V22" /></svg>
                     <span className="text-[8px] sm:text-[9px] font-bold">Source</span>
-                  </div>
+                  </a>
                   {repo.homepage && (
-                    <a href={repo.homepage} target="_blank" rel="noopener noreferrer" onClick={(e) => e.stopPropagation()}
+                    <a href={repo.homepage} target="_blank" rel="noopener noreferrer"
                       className="flex items-center gap-1 px-2 py-1 rounded-md transition-all cursor-pointer"
                       style={{ color: langColor, backgroundColor: `${langColor}15`, border: `1px solid ${langColor}25` }}
                     >
@@ -144,7 +144,7 @@ function ProjectCard({ repo }: { repo: GithubRepo }) {
               </div>
             </div>
           </div>
-        </a>
+        </div>
       </TiltCard>
     </motion.div>
   );
@@ -156,14 +156,14 @@ function FeaturedCard({ repo }: { repo: GithubRepo }) {
   return (
     <motion.div variants={cardUp}>
       <TiltCard intensity={5}>
-        <a href={repo.html_url} target="_blank" rel="noopener noreferrer" className="block group/card">
+        <div className="block group/card relative h-full">
           <div className="glass-card-glow overflow-hidden relative">
             <div className="absolute inset-0 pointer-events-none opacity-25"
               style={{ background: `radial-gradient(800px circle at 30% 30%, ${langColor}20 0%, transparent 60%)` }}
             />
 
             {/* Preview */}
-            <div className="relative h-32 sm:h-40 lg:h-48 overflow-hidden">
+            <a href={repo.html_url} target="_blank" rel="noopener noreferrer" className="block relative h-32 sm:h-40 lg:h-48 overflow-hidden">
               <div className="absolute inset-0 transition-transform duration-700 group-hover/card:scale-105"
                 style={{ background: `linear-gradient(160deg, ${langColor}35 0%, ${langColor}08 30%, transparent 60%)` }}
               />
@@ -196,7 +196,7 @@ function FeaturedCard({ repo }: { repo: GithubRepo }) {
                 </h3>
                 <p className="text-[10px] sm:text-xs text-white/70 drop-shadow line-clamp-1 max-w-2xl">{repo.description || ""}</p>
               </div>
-            </div>
+            </a>
 
             {/* Details */}
             <div className="px-3 sm:px-4 pb-3 sm:pb-4">
@@ -206,11 +206,11 @@ function FeaturedCard({ repo }: { repo: GithubRepo }) {
                 <span className="text-[10px] sm:text-xs text-text-secondary opacity-60">{timeAgo(repo.pushed_at)}</span>
               </div>
               <div className="flex items-center gap-2 sm:gap-3 mt-2 sm:mt-3">
-                <span className="flex items-center gap-1.5 text-[10px] sm:text-xs font-bold text-white bg-purple-500/20 border border-purple-500/30 rounded-lg px-3 py-1.5 uppercase tracking-wider hover:bg-purple-500/30 transition-all cursor-pointer">
+                <a href={repo.html_url} target="_blank" rel="noopener noreferrer" className="flex items-center gap-1.5 text-[10px] sm:text-xs font-bold text-white bg-purple-500/20 border border-purple-500/30 rounded-lg px-3 py-1.5 uppercase tracking-wider hover:bg-purple-500/30 transition-all cursor-pointer">
                   <ExternalLink className="w-3 h-3" /> Source
-                </span>
+                </a>
                 {repo.homepage && (
-                  <a href={repo.homepage} target="_blank" rel="noopener noreferrer" onClick={(e) => e.stopPropagation()}
+                  <a href={repo.homepage} target="_blank" rel="noopener noreferrer"
                     className="flex items-center gap-1.5 text-[10px] sm:text-xs font-bold rounded-lg px-3 py-1.5 uppercase tracking-wider transition-all cursor-pointer"
                     style={{ color: langColor, backgroundColor: `${langColor}18`, border: `1px solid ${langColor}28` }}
                   >
@@ -220,7 +220,7 @@ function FeaturedCard({ repo }: { repo: GithubRepo }) {
               </div>
             </div>
           </div>
-        </a>
+        </div>
       </TiltCard>
     </motion.div>
   );
