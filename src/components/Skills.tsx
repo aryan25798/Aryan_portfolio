@@ -5,6 +5,7 @@ import { motion, AnimatePresence } from "framer-motion";
 import { Layers, Code, Terminal, Database, Cloud, Settings } from "lucide-react";
 import { useGitHub } from "@/lib/useGitHub";
 import TiltCard from "./TiltCard";
+import SkillIcon from "./SkillIcon";
 
 const cats = [
   { id: "all", name: "All Stack", icon: <Layers className="w-3.5 h-3.5" /> },
@@ -44,23 +45,6 @@ const skillData = [
   { n: "Terraform", l: "Advanced", c: "cloud", col: "text-purple-500", g: "#a855f7", slug: "terraform" },
   { n: "Salesforce", l: "Expert", c: "salesforce", col: "text-cyan-400", g: "#06b6d4", slug: "salesforce" },
 ];
-
-function SkillIcon({ slug, name }: { slug: string; name: string }) {
-  const [err, setErr] = useState(false);
-  if (err) {
-    return <span className="text-[10px] sm:text-xs font-black text-white/80">{name[0]}</span>;
-  }
-  return (
-    /* eslint-disable-next-line @next/next/no-img-element */
-    <img
-      src={`https://cdn.simpleicons.org/${slug}/white`}
-      alt={name}
-      className="w-full h-full object-contain"
-      loading="lazy"
-      onError={() => setErr(true)}
-    />
-  );
-}
 
 const SkillRing = ({ progress, color }: { progress: number; color: string }) => {
   const ref = useRef<HTMLDivElement>(null);
@@ -170,7 +154,7 @@ export default function Skills() {
                   <div className="relative w-9 h-9 xs:w-10 xs:h-10 sm:w-12 sm:h-12 lg:w-14 lg:h-14 flex items-center justify-center">
                     <SkillRing progress={progressMap[s.n] || 80} color={s.g} />
                     <span className="absolute inset-0 flex items-center justify-center transition-all duration-500 group-hover:scale-110 p-2.5 sm:p-3">
-                      <SkillIcon slug={s.slug} name={s.n} />
+                      <SkillIcon slug={s.slug} name={s.n} className="w-full h-full object-contain" />
                     </span>
                   </div>
                   <div>

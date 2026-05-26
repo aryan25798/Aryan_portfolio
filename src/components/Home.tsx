@@ -8,6 +8,7 @@ import MagneticButton from "./MagneticButton";
 import TiltCard from "./TiltCard";
 import AnimatedCounter from "./AnimatedCounter";
 import ResumeViewer from "./ResumeViewer";
+import SkillIcon from "./SkillIcon";
 import headshot from "../../public/assets/headshot_transparent.png";
 
 interface Props {
@@ -417,12 +418,65 @@ export default function Home({ setActivePage }: Props) {
         ))}
       </motion.div>
 
+      <motion.div variants={i} className="relative overflow-hidden w-full py-2 sm:py-3 z-10">
+        <div className="absolute inset-y-0 left-0 w-8 sm:w-16 bg-gradient-to-r from-[#050816] to-transparent z-10 pointer-events-none" />
+        <div className="absolute inset-y-0 right-0 w-8 sm:w-16 bg-gradient-to-l from-[#050816] to-transparent z-10 pointer-events-none" />
+        <motion.div
+          className="flex gap-6 sm:gap-10 items-center"
+          animate={{ x: ["0%", "-50%"] }}
+          transition={{ duration: 40, repeat: Infinity, ease: "linear" }}
+        >
+          {[
+            { name: "Java", slug: "java" },
+            { name: "React", slug: "react" },
+            { name: "AWS", slug: "amazonwebservices" },
+            { name: "Spring Boot", slug: "springboot" },
+            { name: "Docker", slug: "docker" },
+            { name: "Apache Kafka", slug: "apachekafka" },
+            { name: "MongoDB", slug: "mongodb" },
+            { name: "TypeScript", slug: "typescript" },
+            { name: "Python", slug: "python" },
+            { name: "Kubernetes", slug: "kubernetes" },
+            { name: "PostgreSQL", slug: "postgresql" },
+            { name: "Redis", slug: "redis" },
+            { name: "Next.js", slug: "nextdotjs" },
+            { name: "Salesforce", slug: "salesforce" },
+            { name: "Terraform", slug: "terraform" },
+            { name: "Jenkins", slug: "jenkins" },
+          ].concat([
+            { name: "Java", slug: "java" },
+            { name: "React", slug: "react" },
+            { name: "AWS", slug: "amazonwebservices" },
+            { name: "Spring Boot", slug: "springboot" },
+            { name: "Docker", slug: "docker" },
+            { name: "Apache Kafka", slug: "apachekafka" },
+            { name: "MongoDB", slug: "mongodb" },
+            { name: "TypeScript", slug: "typescript" },
+            { name: "Python", slug: "python" },
+            { name: "Kubernetes", slug: "kubernetes" },
+            { name: "PostgreSQL", slug: "postgresql" },
+            { name: "Redis", slug: "redis" },
+            { name: "Next.js", slug: "nextdotjs" },
+            { name: "Salesforce", slug: "salesforce" },
+            { name: "Terraform", slug: "terraform" },
+            { name: "Jenkins", slug: "jenkins" },
+          ]).map((s, i) => (
+            <div key={i} className="flex items-center gap-2 sm:gap-3 whitespace-nowrap group/ticker">
+              <div className="w-6 h-6 sm:w-7 sm:h-7 rounded-lg bg-white/[0.03] border border-white/10 flex items-center justify-center group-hover/ticker:border-purple-500/40 transition-all">
+                <SkillIcon slug={s.slug} name={s.name} className="w-3.5 h-3.5 sm:w-4 sm:h-4" />
+              </div>
+              <span className="text-[10px] sm:text-xs font-semibold text-text-secondary group-hover/ticker:text-white transition-colors">{s.name}</span>
+            </div>
+          ))}
+        </motion.div>
+      </motion.div>
+
       <motion.div variants={i} className="grid grid-cols-1 lg:grid-cols-12 gap-4 sm:gap-5 lg:gap-6 w-full items-stretch relative z-10">
         
         <div className="lg:col-span-5 flex w-full">
           <TiltCard intensity={3} className="w-full flex">
             <div className="glass-card-glow p-4 sm:p-5 lg:p-6 text-center group bg-black/40 w-full flex items-center justify-center">
-              <div className="grid grid-cols-2 lg:grid-cols-2 xl:grid-cols-4 gap-2 sm:gap-4 w-full">
+              <div className="grid grid-cols-1 xs:grid-cols-2 xl:grid-cols-4 gap-2 sm:gap-4 w-full">
                 {[
                   { end: 2, suffix: "+", label: "Years Experience" },
                   { end: 25, suffix: "+", label: "Projects Completed" },
@@ -462,8 +516,7 @@ export default function Home({ setActivePage }: Props) {
                 ].map((tech, idx) => (
                   <div key={idx} className="flex flex-col items-center gap-1 group/tile">
                     <div className="w-9 h-9 xs:w-10 xs:h-10 sm:w-12 sm:h-12 rounded-xl bg-black/60 border border-white/10 flex items-center justify-center transition-all duration-300 group-hover/tile:scale-110 group-hover/tile:border-purple-500/40 group-hover/tile:-translate-y-1 group-hover/tile:shadow-[0_0_20px_rgba(124,58,237,0.3)] shadow-lg">
-                      {/* eslint-disable-next-line @next/next/no-img-element */}
-                      <img src={`https://cdn.simpleicons.org/${tech.slug}/white`} alt={tech.name} className="w-5 h-5 sm:w-6 sm:h-6" loading="lazy" />
+                      <SkillIcon slug={tech.slug} name={tech.name} className="w-5 h-5 sm:w-6 sm:h-6" />
                     </div>
                     <span className="text-[9px] xs:text-[9px] sm:text-[9px] font-bold text-text-secondary uppercase tracking-wider group-hover/tile:text-white transition-colors text-center leading-tight">{tech.name}</span>
                   </div>
