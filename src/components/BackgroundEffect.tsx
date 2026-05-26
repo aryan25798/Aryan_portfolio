@@ -1,14 +1,28 @@
 "use client";
-
-import { useEffect, useRef } from "react";
-
+ 
+import { useEffect, useRef, useState } from "react";
+ 
 export default function BackgroundEffect() {
   const canvasRef = useRef<HTMLCanvasElement>(null);
-  const isMobile = typeof window !== "undefined" && window.innerWidth < 768;
-  const isSlow = typeof window !== "undefined" && window.innerWidth < 1280;
-
+  const [mounted, setMounted] = useState(false);
+  const [isMobile, setIsMobile] = useState(false);
+  const [isSlow, setIsSlow] = useState(false);
+ 
   useEffect(() => {
-    if (isMobile) return;
+    setMounted(true);
+    setIsMobile(window.innerWidth < 768);
+    setIsSlow(window.innerWidth < 1280);
+    
+    const handleResize = () => {
+      setIsMobile(window.innerWidth < 768);
+      setIsSlow(window.innerWidth < 1280);
+    };
+    window.addEventListener("resize", handleResize, { passive: true });
+    return () => window.removeEventListener("resize", handleResize);
+  }, []);
+ 
+  useEffect(() => {
+    if (!mounted || isMobile) return;
     const canvas = canvasRef.current;
     if (!canvas) return;
     const ctx = canvas.getContext("2d");
@@ -177,7 +191,7 @@ export default function BackgroundEffect() {
       window.removeEventListener("resize", resize);
       window.removeEventListener("mousemove", onMouse);
     };
-  }, [isMobile, isSlow]);
+  }, [mounted, isMobile, isSlow]);
 
   return (
     <div className="fixed inset-0 z-0 overflow-hidden pointer-events-none select-none">
@@ -187,7 +201,7 @@ export default function BackgroundEffect() {
       <div className="absolute top-[40%] right-[5%] w-[350px] sm:w-[500px] lg:w-[700px] h-[350px] sm:h-[500px] lg:h-[700px] rounded-full animate-aurora-reverse" style={{ background: "radial-gradient(circle, rgba(6,182,212,0.08) 0%, rgba(59,130,246,0.02) 40%, transparent 80%)" }} />
       <div className="absolute bottom-[10%] left-[30%] w-[300px] sm:w-[400px] lg:w-[600px] h-[300px] sm:h-[400px] lg:h-[600px] rounded-full animate-aurora" style={{ background: "radial-gradient(circle, rgba(168,85,247,0.06) 0%, rgba(124,58,237,0.02) 40%, transparent 80%)", animationDelay: "-4s" }} />
 
-      {!isMobile && <canvas ref={canvasRef} className="absolute inset-0 w-full h-full" style={{ zIndex: 1 }} />}
+      {mounted && !isMobile && <canvas ref={canvasRef} className="absolute inset-0 w-full h-full" style={{ zIndex: 1 }} />}
 
       <div className="absolute inset-0 opacity-[0.015] pointer-events-none" style={{ zIndex: 2, backgroundImage: "linear-gradient(rgba(124,58,237,0.3) 1px, transparent 1px), linear-gradient(90deg, rgba(124,58,237,0.3) 1px, transparent 1px)", backgroundSize: "60px 60px" }} />
 

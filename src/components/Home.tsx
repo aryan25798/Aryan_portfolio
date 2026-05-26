@@ -300,7 +300,7 @@ export default function Home({ setActivePage }: Props) {
             />
           </div>
 
-          <div className="absolute w-[320px] h-[320px] xs:w-[360px] xs:h-[360px] sm:w-[420px] sm:h-[420px] lg:w-[480px] lg:h-[480px] rounded-full animate-[spin_60s_linear_infinite] opacity-40">
+          <div className="absolute w-[320px] h-[320px] xs:w-[360px] xs:h-[360px] sm:w-[420px] sm:h-[420px] lg:w-[480px] lg:h-[480px] rounded-full animate-[spin_60s_linear_infinite] opacity-40" style={{ willChange: "transform", backfaceVisibility: "hidden" }}>
             <div className="absolute inset-0 rounded-full border border-purple-500/10 shadow-[0_0_30px_rgba(124,58,237,0.05)]" />
             <div className="absolute inset-[15%] rounded-full border border-cyan-500/5" />
             <div className="absolute top-0 left-1/2 -translate-x-1/2 w-3 h-3 rounded-full bg-purple-500/60 shadow-[0_0_15px_rgba(124,58,237,0.6)] animate-pulse-slow" />
@@ -451,7 +451,7 @@ export default function Home({ setActivePage }: Props) {
         <div className="absolute inset-y-0 left-0 w-8 sm:w-16 bg-gradient-to-r from-[#050816] to-transparent z-10 pointer-events-none" />
         <div className="absolute inset-y-0 right-0 w-8 sm:w-16 bg-gradient-to-l from-[#050816] to-transparent z-10 pointer-events-none" />
         <div className="flex gap-6 sm:gap-10 items-center animate-marquee"
-          style={{ width: "fit-content" }}
+          style={{ width: "fit-content", willChange: "transform", backfaceVisibility: "hidden" }}
         >
           {[
             { name: "Java", slug: "java" },

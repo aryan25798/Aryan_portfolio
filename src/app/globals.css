@@ -377,3 +377,113 @@ body {
   html { font-size: 19px; }
   .section-container { max-width: 80rem; }
 }
+
+/* Premium Performance Optimizations for Low-End & Mobile Devices */
+@media (max-width: 768px) {
+  /* 1. Disable expensive backdrop-filter calculations to run scrolling at 60 FPS */
+  .glass, 
+  .glass-card, 
+  .glass-card-glow,
+  .backdrop-blur-sm, 
+  .backdrop-blur-md, 
+  .backdrop-blur-lg, 
+  .backdrop-blur-xl, 
+  .backdrop-blur-2xl,
+  .backdrop-blur-3xl {
+    backdrop-filter: none !important;
+    -webkit-backdrop-filter: none !important;
+  }
+
+  /* 2. Sleek, premium opaque color fallbacks to maintain futuristic obsidian space styling */
+  .glass {
+    background: linear-gradient(135deg, rgba(10, 7, 28, 0.95), rgba(15, 10, 36, 0.9)) !important;
+    border-color: rgba(255, 255, 255, 0.08) !important;
+  }
+
+  .glass-card {
+    background: linear-gradient(135deg, rgba(10, 7, 28, 0.95), rgba(15, 10, 36, 0.9)) !important;
+    border-color: rgba(255, 255, 255, 0.1) !important;
+  }
+
+  .glass-card-glow {
+    background: rgba(10, 7, 28, 0.93) !important;
+  }
+
+  /* Replace Tailwind utility classes that rely on blur transparency for high contrast readability */
+  .bg-\[\#050816\]\/70 {
+    background-color: rgba(5, 8, 22, 0.96) !important;
+  }
+  .bg-\[\#050816\]\/90 {
+    background-color: rgba(5, 8, 22, 0.98) !important;
+  }
+  .bg-\[\#050816\]\/98 {
+    background-color: rgba(5, 8, 22, 0.99) !important;
+  }
+  .bg-\[\#060318\]\/40 {
+    background-color: rgba(6, 3, 24, 0.96) !important;
+  }
+  .bg-black\/40 {
+    background-color: rgba(10, 7, 28, 0.94) !important;
+  }
+  .bg-black\/60 {
+    background-color: rgba(5, 8, 22, 0.97) !important;
+  }
+  .bg-black\/85 {
+    background-color: rgba(3, 2, 10, 0.96) !important;
+  }
+  .bg-\[\#0d0924\]\/95 {
+    background-color: rgba(13, 9, 36, 0.99) !important;
+  }
+  .bg-white\/5 {
+    background-color: rgba(255, 255, 255, 0.06) !important;
+  }
+  .bg-white\/\[0\.02\] {
+    background-color: rgba(255, 255, 255, 0.03) !important;
+  }
+  
+  /* Disable massive CSS filters (blur radial blobs) that stall CPU rasterizer on low-end scrolling */
+  .blur-\[120px\], .blur-\[100px\], .blur-\[80px\], .blur-\[60px\], .blur-3xl, .blur-2xl {
+    filter: none !important;
+    background: radial-gradient(circle, rgba(124, 58, 237, 0.08) 0%, transparent 70%) !important;
+  }
+  
+  .blur-\[30px\], .blur-\[25px\], .blur-\[15px\], .blur-xl, .blur-lg {
+    filter: none !important;
+    background: radial-gradient(circle, rgba(6, 182, 212, 0.08) 0%, transparent 80%) !important;
+  }
+
+  /* 3. Suppress persistent stuck-hover outlines and blurs on touch displays */
+  @media (pointer: coarse) {
+    .glass-card:hover {
+      background: linear-gradient(135deg, rgba(10, 7, 28, 0.95), rgba(15, 10, 36, 0.9)) !important;
+      border-color: rgba(255, 255, 255, 0.1) !important;
+      box-shadow: 0 8px 32px rgba(0, 0, 0, 0.37) !important;
+      transform: none !important;
+    }
+    
+    .glass-card-glow:hover {
+      transform: none !important;
+      box-shadow: none !important;
+    }
+    
+    .btn-primary:hover, .btn-secondary:hover {
+      transform: none !important;
+      box-shadow: none !important;
+    }
+    
+    /* Smooth, responsive micro-tap active state feedback for mobile touch controls */
+    .glass-card:active, .glass-card-glow:active, .btn-primary:active, .btn-secondary:active {
+      transform: scale(0.97) !important;
+      transition: transform 0.1s ease !important;
+    }
+  }
+}
+
+/* 4. Force isolated hardware compositor layers for high-refresh-rate marquee animations */
+.animate-marquee {
+  will-change: transform;
+  backface-visibility: hidden;
+  -webkit-backface-visibility: hidden;
+  transform: translate3d(0, 0, 0);
+}
+
