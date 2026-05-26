@@ -178,7 +178,7 @@ export default function Home({ setActivePage }: Props) {
   ];
 
   return (
-    <><motion.div variants={c} initial="hidden" animate="visible" className="relative flex flex-col gap-4 sm:gap-8 lg:gap-12 w-full pt-2 sm:pt-4">
+    <motion.div variants={c} initial="hidden" animate="visible" className="relative flex flex-col gap-4 sm:gap-8 lg:gap-12 w-full pt-2 sm:pt-4">
 
       <div className="absolute -inset-x-3 sm:-inset-x-6 lg:-inset-x-8 -top-[80px] sm:-top-[100px] -bottom-[80px] sm:-bottom-[100px] z-0 pointer-events-none overflow-hidden select-none">
         <div className="relative w-full h-full min-h-[600px] sm:min-h-[800px] lg:min-h-[900px]">
@@ -473,10 +473,8 @@ export default function Home({ setActivePage }: Props) {
           </TiltCard>
         </div>
 
+        <ResumeViewer open={showResume} onClose={() => setShowResume(false)} />
       </motion.div>
-
     </motion.div>
-      <ResumeViewer open={showResume} onClose={() => setShowResume(false)} />
-    </>
   );
 }
