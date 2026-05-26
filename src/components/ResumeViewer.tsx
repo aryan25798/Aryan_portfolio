@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import { X, Download } from "lucide-react";
 
@@ -10,6 +10,19 @@ interface Props {
 }
 
 export default function ResumeViewer({ open, onClose }: Props) {
+  const [mounted, setMounted] = useState(false);
+  const [isMobile, setIsMobile] = useState(false);
+
+  useEffect(() => {
+    setMounted(true);
+    setIsMobile(window.innerWidth < 768);
+    
+    const handleResize = () => {
+      setIsMobile(window.innerWidth < 768);
+    };
+    window.addEventListener("resize", handleResize);
+    return () => window.removeEventListener("resize", handleResize);
+  }, []);
   useEffect(() => {
     if (!open) return;
     const onKey = (e: KeyboardEvent) => {
@@ -105,7 +118,9 @@ export default function ResumeViewer({ open, onClose }: Props) {
               </div>
             </div>
 
-            {typeof window !== "undefined" && window.innerWidth < 768 ? (
+            {!mounted ? (
+              <div className="relative w-full flex-1" style={{ height: "calc(100% - 53px)" }} />
+            ) : isMobile ? (
               <div className="relative w-full flex-1 flex flex-col items-center justify-center p-6 text-center" style={{ height: "calc(100% - 53px)" }}>
                 <div className="w-16 h-16 rounded-full bg-gradient-to-br from-purple-500/20 to-cyan-500/20 border border-purple-500/30 flex items-center justify-center mb-5 animate-pulse shadow-[0_0_30px_rgba(124,58,237,0.2)]">
                   <svg viewBox="0 0 24 24" width="28" height="28" fill="none" stroke="#a78bfa" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">

@@ -6,6 +6,11 @@ export default function CustomCursor() {
   const [pos, setPos] = useState({ x: -100, y: -100 });
   const [visible, setVisible] = useState(false);
   const [hovering, setHovering] = useState(false);
+  const [mounted, setMounted] = useState(false);
+
+  useEffect(() => {
+    setMounted(true);
+  }, []);
 
   useEffect(() => {
     const onMouse = (e: MouseEvent) => {
@@ -40,7 +45,7 @@ export default function CustomCursor() {
     };
   }, [visible]);
 
-  if (typeof window === "undefined") return null;
+  if (!mounted || typeof window === "undefined") return null;
 
   const size = hovering ? 120 : 60;
 
