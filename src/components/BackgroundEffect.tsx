@@ -15,6 +15,12 @@ export default function BackgroundEffect() {
     if (!ctx) return;
 
     let animId: number;
+    let isVisible = true;
+    let lastFrameTime = 0;
+    const TARGET_FPS = 30;
+    const FRAME_INTERVAL = 1000 / TARGET_FPS;
+    let frameSkip = 0;
+
     const mouse = { x: -1000, y: -1000 };
 
     let particles: Array<{
@@ -22,7 +28,7 @@ export default function BackgroundEffect() {
       r: number; a: number; speed: number; up: boolean; baseA: number;
     }> = [];
 
-    const count = isSlow ? 60 : 100;
+    const count = isSlow ? 40 : 60;
     const connDist = isSlow ? 100 : 150;
 
     const resize = () => {
@@ -60,13 +66,28 @@ export default function BackgroundEffect() {
       });
     };
 
-    const draw = () => {
+    const draw = (timestamp: number) => {
+      if (!isVisible) {
+        animId = requestAnimationFrame(draw);
+        return;
+      }
+
+      const elapsed = timestamp - lastFrameTime;
+      if (elapsed < FRAME_INTERVAL) {
+        animId = requestAnimationFrame(draw);
+        return;
+      }
+      lastFrameTime = timestamp - (elapsed % FRAME_INTERVAL);
+      frameSkip++;
+
       ctx.clearRect(0, 0, canvas.width, canvas.height);
 
-      starTimer++;
-      if (starTimer > 100 + Math.random() * 100) {
-        spawnStar();
-        starTimer = 0;
+      if (frameSkip % 2 === 0) {
+        starTimer++;
+        if (starTimer > 100 + Math.random() * 200) {
+          spawnStar();
+          starTimer = 0;
+        }
       }
 
       for (let i = shootingStars.length - 1; i >= 0; i--) {
@@ -116,8 +137,9 @@ export default function BackgroundEffect() {
         ctx.fillStyle = `rgba(124,58,237,${p.a})`;
         ctx.fill();
 
-        if (!isSlow) {
-          for (let j = i + 1; j < len; j++) {
+        if (!isSlow && frameSkip % 3 === 0) {
+          const maxJ = Math.min(i + 30, len);
+          for (let j = i + 1; j < maxJ; j++) {
             const p2 = particles[j];
             const dx2 = p.x - p2.x;
             const dy2 = p.y - p2.y;
@@ -138,13 +160,20 @@ export default function BackgroundEffect() {
     };
 
     const onMouse = (e: MouseEvent) => { mouse.x = e.clientX; mouse.y = e.clientY; };
+    const observer = new IntersectionObserver(([entry]) => {
+      isVisible = entry.isIntersecting;
+    }, { threshold: 0 });
+    observer.observe(canvas);
+
     window.addEventListener("resize", resize);
     window.addEventListener("mousemove", onMouse);
     resize();
-    draw();
+    lastFrameTime = performance.now();
+    animId = requestAnimationFrame(draw);
 
     return () => {
       cancelAnimationFrame(animId);
+      observer.disconnect();
       window.removeEventListener("resize", resize);
       window.removeEventListener("mousemove", onMouse);
     };
@@ -158,7 +187,7 @@ export default function BackgroundEffect() {
       <div className="absolute top-[40%] right-[5%] w-[350px] sm:w-[500px] lg:w-[700px] h-[350px] sm:h-[500px] lg:h-[700px] rounded-full animate-aurora-reverse" style={{ background: "radial-gradient(circle, rgba(6,182,212,0.08) 0%, rgba(59,130,246,0.02) 40%, transparent 80%)" }} />
       <div className="absolute bottom-[10%] left-[30%] w-[300px] sm:w-[400px] lg:w-[600px] h-[300px] sm:h-[400px] lg:h-[600px] rounded-full animate-aurora" style={{ background: "radial-gradient(circle, rgba(168,85,247,0.06) 0%, rgba(124,58,237,0.02) 40%, transparent 80%)", animationDelay: "-4s" }} />
 
-      {!isMobile && <canvas ref={canvasRef} className="absolute inset-0 w-full h-full" style={{ zIndex: 1, willChange: "transform" }} />}
+      {!isMobile && <canvas ref={canvasRef} className="absolute inset-0 w-full h-full" style={{ zIndex: 1 }} />}
 
       <div className="absolute inset-0 opacity-[0.015] pointer-events-none" style={{ zIndex: 2, backgroundImage: "linear-gradient(rgba(124,58,237,0.3) 1px, transparent 1px), linear-gradient(90deg, rgba(124,58,237,0.3) 1px, transparent 1px)", backgroundSize: "60px 60px" }} />
 

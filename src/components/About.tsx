@@ -42,6 +42,8 @@ export default function About() {
                 src="/assets/headshot_transparent.png"
                 alt="Aryan"
                 className="w-full h-auto object-cover scale-105 hover:scale-110 transition-transform duration-700"
+                loading="lazy"
+                decoding="async"
               />
               <div className="absolute bottom-0 left-0 right-0 z-20 p-3 sm:p-4 bg-gradient-to-t from-[#050816]/90 to-transparent">
                 <h3 className="font-display font-bold text-base sm:text-lg text-white">Aryan</h3>

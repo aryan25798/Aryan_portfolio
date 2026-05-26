@@ -63,14 +63,19 @@ const FloatingBadge = ({ children, className, orbitRadius, delay, duration }: { 
 
 const TypewriterText = ({ texts }: { texts: string[] }) => {
   const elRef = useRef<HTMLSpanElement>(null);
-  const stateRef = useRef({ idx: 0, char: 0, dir: 1 as 1 | -1 });
+  const stateRef = useRef({ idx: 0, char: 0, dir: 1 as 1 | -1, paused: false });
 
   useEffect(() => {
     let timer: ReturnType<typeof setTimeout>;
+    let observer: IntersectionObserver | null = null;
+
     const tick = () => {
       const s = stateRef.current;
       const el = elRef.current;
-      if (!el) return;
+      if (!el || s.paused) {
+        timer = setTimeout(tick, 200);
+        return;
+      }
       if (s.dir === 1) {
         if (s.char >= texts[s.idx].length) {
           timer = setTimeout(() => { s.dir = -1; tick(); }, 2000);
@@ -86,10 +91,22 @@ const TypewriterText = ({ texts }: { texts: string[] }) => {
         }
       }
       el.textContent = texts[s.idx].substring(0, s.char);
-      timer = setTimeout(tick, s.dir === 1 ? 60 : 20);
+      timer = setTimeout(tick, s.dir === 1 ? 80 : 30);
     };
+
+    const el = elRef.current;
+    if (el) {
+      observer = new IntersectionObserver(([entry]) => {
+        stateRef.current.paused = !entry.isIntersecting;
+      }, { threshold: 0 });
+      observer.observe(el);
+    }
+
     timer = setTimeout(tick, 500);
-    return () => clearTimeout(timer);
+    return () => {
+      clearTimeout(timer);
+      if (observer) observer.disconnect();
+    };
   }, [texts]);
 
   return <span ref={elRef} className="typing-cursor" />;
@@ -146,18 +163,25 @@ const ContributionHeatmap = () => {
 };
 
 export default function Home({ setActivePage }: Props) {
-  const [scrollActive, setScrollActive] = useState(false);
   const [showResume, setShowResume] = useState(false);
-  const [parallaxY, setParallaxY] = useState(0);
+  const scrollActiveRef = useRef(false);
+  const parallaxElRef = useRef<HTMLDivElement>(null);
   const rafRef = useRef<number>(0);
+  const [scrollActive, setScrollActive] = useState(false);
 
   useEffect(() => {
     const handleScroll = () => {
-      setScrollActive(window.scrollY > 100);
-      if (rafRef.current) cancelAnimationFrame(rafRef.current);
-      rafRef.current = requestAnimationFrame(() => {
-        setParallaxY(window.scrollY * 0.15);
-      });
+      const active = window.scrollY > 100;
+      if (active !== scrollActiveRef.current) {
+        scrollActiveRef.current = active;
+        setScrollActive(active);
+      }
+      if (parallaxElRef.current && !rafRef.current) {
+        rafRef.current = requestAnimationFrame(() => {
+          parallaxElRef.current!.style.transform = `translateY(${window.scrollY * 0.15}px)`;
+          rafRef.current = 0;
+        });
+      }
     };
     window.addEventListener("scroll", handleScroll, { passive: true });
     return () => {
@@ -181,7 +205,7 @@ export default function Home({ setActivePage }: Props) {
     <motion.div variants={c} initial="hidden" animate="visible" className="relative flex flex-col gap-4 sm:gap-8 lg:gap-12 w-full pt-2 sm:pt-4">
 
       <div className="absolute -inset-x-3 sm:-inset-x-6 lg:-inset-x-8 -top-[80px] sm:-top-[100px] -bottom-[80px] sm:-bottom-[100px] z-0 pointer-events-none overflow-hidden select-none">
-        <div className="relative w-full h-full min-h-[600px] sm:min-h-[800px] lg:min-h-[900px]" style={{ transform: `translateY(${parallaxY}px)` }}>
+        <div ref={parallaxElRef} className="relative w-full h-full min-h-[600px] sm:min-h-[800px] lg:min-h-[900px]">
           <Image
             src="/assets/hero_background.png"
             alt="Cosmic Background"

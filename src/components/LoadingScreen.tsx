@@ -8,20 +8,29 @@ export default function LoadingScreen() {
   const [progress, setProgress] = useState(0);
 
   useEffect(() => {
+    let mounted = true;
     const interval = setInterval(() => {
+      if (!mounted) return;
       setProgress((p) => {
         if (p >= 100) {
           clearInterval(interval);
           return 100;
         }
-        return p + Math.random() * 15 + 5;
+        const step = Math.random() * 12 + 4;
+        const next = Math.min(p + step, 95);
+        if (next >= 95) clearInterval(interval);
+        return next;
       });
-    }, 300);
+    }, 200);
     const timer = setTimeout(() => {
+      if (!mounted) return;
       setProgress(100);
-      setTimeout(() => setLoading(false), 600);
-    }, 1800);
+      setTimeout(() => {
+        if (mounted) setLoading(false);
+      }, 400);
+    }, 800);
     return () => {
+      mounted = false;
       clearTimeout(timer);
       clearInterval(interval);
     };
@@ -34,7 +43,7 @@ export default function LoadingScreen() {
           key="loader"
           initial={{ opacity: 1 }}
           exit={{ opacity: 0 }}
-          transition={{ duration: 0.6, ease: [0.16, 1, 0.3, 1] }}
+          transition={{ duration: 0.4, ease: [0.16, 1, 0.3, 1] }}
           className="fixed inset-0 z-[99999] flex flex-col items-center justify-center bg-[#050816]"
         >
           <div className="absolute w-[300px] h-[300px] rounded-full bg-purple-500/10 blur-[80px]" />
@@ -96,7 +105,7 @@ export default function LoadingScreen() {
                 className="h-full rounded-full bg-gradient-to-r from-purple-500 to-cyan-500"
                 initial={{ width: 0 }}
                 animate={{ width: `${Math.min(progress, 100)}%` }}
-                transition={{ duration: 0.3 }}
+                transition={{ duration: 0.2 }}
               />
             </div>
             <p className="text-[10px] text-text-secondary mt-2 font-mono">
