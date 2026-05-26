@@ -1,7 +1,6 @@
 "use client";
 
 import React from "react";
-import { motion } from "framer-motion";
 import { Home, User, Code, Briefcase, GraduationCap, Mail, Newspaper } from "lucide-react";
 
 interface Props {
@@ -34,25 +33,21 @@ export default function Sidebar({ activePage, setActivePage, onMenuToggle }: Pro
   };
 
   return (
-    <aside className="fixed left-0 top-0 h-screen w-14 sm:w-16 lg:w-20 z-50 bg-[#060318]/40 border-r border-white/5 flex flex-col justify-between items-center py-3 sm:py-4 lg:py-6 backdrop-blur-2xl transition-all hidden md:flex shadow-[2px_0_30px_rgba(0,0,0,0.3)]">
-      <motion.button
-        whileHover={{ scale: 1.08 }}
-        whileTap={{ scale: 0.95 }}
+    <aside className="fixed left-0 top-0 h-screen w-14 sm:w-16 lg:w-20 z-50 bg-[#060318]/40 border-r border-white/5 flex flex-col justify-between items-center py-3 sm:py-4 lg:py-6 backdrop-blur-2xl hidden md:flex shadow-[2px_0_30px_rgba(0,0,0,0.3)]">
+      <button
         onClick={() => handleNav("home")}
-        className="w-8 h-8 sm:w-9 sm:h-9 lg:w-11 lg:h-11 rounded-xl flex items-center justify-center border border-purple-500/30 bg-purple-500/10 hover:border-purple-500 transition-all hover:shadow-[0_0_20px_rgba(124,58,237,0.4)] relative group"
+        className="w-8 h-8 sm:w-9 sm:h-9 lg:w-11 lg:h-11 rounded-xl flex items-center justify-center border border-purple-500/30 bg-purple-500/10 hover:border-purple-500 transition-[border-color,box-shadow] hover:shadow-[0_0_20px_rgba(124,58,237,0.4)] relative group"
         aria-label="Home"
       >
         <span className="font-display font-extrabold text-sm sm:text-base lg:text-lg text-white animate-text-glow-pulse">A</span>
-      </motion.button>
+      </button>
 
       <nav className="flex flex-col gap-1.5 sm:gap-2 lg:gap-3 w-full px-1.5 sm:px-2 lg:px-3">
         {items.map((item) => (
-          <motion.button
+          <button
             key={item.id}
-            whileHover={{ scale: 1.05 }}
-            whileTap={{ scale: 0.92 }}
             onClick={() => handleNav(item.id)}
-            className={`w-full h-8 sm:h-9 lg:h-11 rounded-xl flex items-center justify-center transition-all duration-300 relative group ${
+            className={`w-full h-8 sm:h-9 lg:h-11 rounded-xl flex items-center justify-center transition-[border-color,background-color,box-shadow] duration-300 relative group ${
               activePage === item.id
                 ? "border border-purple-500/40 bg-purple-500/15 text-white shadow-[0_0_20px_rgba(124,58,237,0.35)]"
                 : "text-text-secondary hover:text-white hover:bg-white/5 hover:border-white/10 border border-transparent"
@@ -62,30 +57,28 @@ export default function Sidebar({ activePage, setActivePage, onMenuToggle }: Pro
             <span className={activePage === item.id ? "inline-flex animate-pulse-scale" : "inline-flex"}>
               {item.icon}
             </span>
-            <span className="absolute left-10 sm:left-11 lg:left-14 px-2 sm:px-3 py-1 sm:py-1.5 rounded-lg bg-[#0a0720]/95 text-text-primary text-[10px] sm:text-[11px] font-semibold opacity-0 translate-x-2 pointer-events-none group-hover:opacity-100 group-hover:translate-x-0 transition-all duration-300 border border-white/5 backdrop-blur-sm shadow-xl whitespace-nowrap z-[60]">
+            <span className="absolute left-10 sm:left-11 lg:left-14 px-2 sm:px-3 py-1 sm:py-1.5 rounded-lg bg-[#0a0720]/95 text-text-primary text-[10px] sm:text-[11px] font-semibold opacity-0 translate-x-2 pointer-events-none group-hover:opacity-100 group-hover:translate-x-0 transition-[opacity,transform] duration-300 border border-white/5 backdrop-blur-sm shadow-xl whitespace-nowrap z-[60]">
               <span className="flex items-center gap-1.5">
                 <span className={`w-1.5 h-1.5 rounded-full ${activePage === item.id ? "bg-purple-500 animate-pulse" : "bg-white/20"}`} />
                 {item.label}
               </span>
             </span>
-          </motion.button>
+          </button>
         ))}
       </nav>
 
       <div className="flex flex-col gap-2 sm:gap-3 lg:gap-4 w-full items-center">
         {socials.map((s, i) => (
-          <motion.a
+          <a
             key={i}
-            whileHover={{ scale: 1.15 }}
-            whileTap={{ scale: 0.9 }}
             href={s.href} target="_blank" rel="noopener noreferrer"
-            className={`text-text-secondary ${s.color} transition-all duration-300 w-4 h-4 sm:w-5 sm:h-5 lg:w-6 lg:h-6`}
+            className={`text-text-secondary ${s.color} transition-colors duration-300 w-4 h-4 sm:w-5 sm:h-5 lg:w-6 lg:h-6`}
             aria-label={s.href.replace("https://", "").split("/")[0]}
           >
             <svg viewBox="0 0 24 24" width="100%" height="100%" fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round">
               <path d={s.path} />
             </svg>
-          </motion.a>
+          </a>
         ))}
       </div>
     </aside>

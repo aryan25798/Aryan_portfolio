@@ -17,9 +17,9 @@ import BlogView from "@/components/Blog";
 import ContactView from "@/components/Contact";
 
 const variants = {
-  initial: { opacity: 0, y: 24, scale: 0.98 },
-  animate: { opacity: 1, y: 0, scale: 1, transition: { duration: 0.45, ease: [0.16, 1, 0.3, 1] as const } },
-  exit: { opacity: 0, y: -16, scale: 0.97, transition: { duration: 0.3, ease: [0.16, 1, 0.3, 1] as const } },
+  initial: { opacity: 0, y: 12 },
+  animate: { opacity: 1, y: 0, transition: { duration: 0.3, ease: [0.16, 1, 0.3, 1] as const } },
+  exit: { opacity: 0, y: -8, transition: { duration: 0.2, ease: [0.16, 1, 0.3, 1] as const } },
 };
 
 const pages = ["home", "about", "skills", "projects", "experience", "blog", "contact"];
@@ -91,7 +91,7 @@ export default function Page() {
       <Header activePage={activePage} setActivePage={navigateTo} mobileMenuOpen={mobileMenuOpen} onMenuToggle={setMobileMenuOpen} />
       <MobileNav activePage={activePage} setActivePage={navigateTo} />
 
-      <main className="pl-0 md:pl-14 lg:pl-20 pt-[60px] sm:pt-[76px] pb-16 md:pb-0 min-h-screen relative z-10">
+      <main className="pl-0 md:pl-14 lg:pl-20 pt-[60px] sm:pt-[76px] pb-16 md:pb-0 min-h-screen relative z-10" style={{ contentVisibility: "auto" }}>
         <div className="section-container">
           <AnimatePresence mode="wait">
             <motion.div key={activePage} variants={variants} initial="initial" animate="animate" exit="exit" className="scroll-mt-24">
