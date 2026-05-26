@@ -346,19 +346,21 @@ export default function Home({ setActivePage }: Props) {
                 </a>
               </div>
               
-              <div className="flex items-center gap-2 sm:gap-4">
-                <div className="text-left flex-shrink-0">
-                  <div className="text-lg xs:text-2xl sm:text-3xl font-black font-display text-white leading-tight">
+              <div className="flex flex-col xs:flex-row xs:items-center gap-3 sm:gap-4 justify-between">
+                <div className="text-left flex flex-row xs:flex-col items-center xs:items-start gap-4 xs:gap-1 flex-shrink-0">
+                  <div className="text-xl xs:text-2xl sm:text-3xl font-black font-display text-white leading-tight">
                     <AnimatedCounter end={1428} duration={2} />
                   </div>
-                  <div className="text-[8px] sm:text-[10px] font-bold text-text-secondary uppercase tracking-wider mt-0.5">Contributions</div>
-                  <div className="inline-flex items-center gap-1 px-1.5 py-0.5 rounded bg-emerald-500/10 border border-emerald-500/20 text-emerald-400 text-[8px] sm:text-[9px] font-bold mt-1 sm:mt-2">
-                    <span className="w-1 h-1.5 sm:w-1.5 sm:h-1.5 rounded-full bg-emerald-400 animate-ping" />
-                    <span>▲ 34%</span>
+                  <div className="flex flex-col">
+                    <div className="text-[8px] sm:text-[10px] font-bold text-text-secondary uppercase tracking-wider">Contributions</div>
+                    <div className="inline-flex items-center gap-1 px-1.5 py-0.5 rounded bg-emerald-500/10 border border-emerald-500/20 text-emerald-400 text-[8px] sm:text-[9px] font-bold mt-0.5 self-start">
+                      <span className="w-1 h-1.5 rounded-full bg-emerald-400 animate-ping" />
+                      <span>▲ 34%</span>
+                    </div>
                   </div>
                 </div>
                 
-                <div className="overflow-x-auto pl-1.5 sm:pl-3 border-l border-white/5 flex-1 min-w-0 scrollbar-none">
+                <div className="overflow-x-auto w-full xs:w-auto pl-0 xs:pl-3 border-t xs:border-t-0 xs:border-l border-white/5 pt-3 xs:pt-0 flex-1 min-w-0 scrollbar-none flex justify-center xs:justify-start">
                   <ContributionHeatmap />
                 </div>
               </div>
@@ -403,7 +405,7 @@ export default function Home({ setActivePage }: Props) {
         </motion.div>
       </div>
 
-        <motion.div variants={i} className="grid grid-cols-2 xs:grid-cols-2 lg:grid-cols-4 gap-2 sm:gap-4 w-full relative z-10">
+        <motion.div variants={i} className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-2 sm:gap-4 w-full relative z-10">
         {[
           { icon: <Code className="w-4 h-4 sm:w-5 sm:h-5 text-violet-400" />, title: "Clean Code", desc: "Maintainable & Scalable" },
           { icon: <Zap className="w-4 h-4 sm:w-5 sm:h-5 text-cyan-400" />, title: "Problem Solver", desc: "Turning ideas into real solutions" },
@@ -482,7 +484,7 @@ export default function Home({ setActivePage }: Props) {
         <div className="lg:col-span-5 flex w-full">
           <TiltCard intensity={3} className="w-full flex">
             <div className="glass-card-glow p-4 sm:p-5 lg:p-6 text-center group bg-black/40 w-full flex items-center justify-center">
-              <div className="grid grid-cols-1 xs:grid-cols-2 xl:grid-cols-4 gap-2 sm:gap-4 w-full">
+              <div className="grid grid-cols-2 lg:grid-cols-4 gap-2 sm:gap-4 w-full">
                 {[
                   { end: 2, suffix: "+", label: "Years Experience" },
                   { end: 25, suffix: "+", label: "Projects Completed" },
@@ -510,21 +512,21 @@ export default function Home({ setActivePage }: Props) {
                 <h4 className="text-[10px] sm:text-xs font-semibold text-text-secondary uppercase tracking-widest">Tech Stack</h4>
               </div>
 
-              <div className="grid grid-cols-4 xs:grid-cols-5 sm:grid-cols-7 lg:grid-cols-4 xl:grid-cols-7 gap-1.5 sm:gap-3 w-full">
+              <div className="flex flex-wrap justify-center gap-2.5 sm:gap-4 w-full">
                 {[
                   { name: "Next.js", slug: "nextdotjs" },
                   { name: "React", slug: "react" },
                   { name: "TypeScript", slug: "typescript" },
                   { name: "Node.js", slug: "nodedotjs" },
                   { name: "MongoDB", slug: "mongodb" },
-                  { name: "Tailwind CSS", slug: "tailwindcss" },
+                  { name: "Tailwind", slug: "tailwindcss" },
                   { name: "AWS", slug: "amazonwebservices" },
                 ].map((tech, idx) => (
-                  <div key={idx} className="flex flex-col items-center gap-1 group/tile">
+                  <div key={idx} className="flex flex-col items-center gap-1 group/tile w-[68px] xs:w-[76px] sm:w-[84px] flex-shrink-0">
                     <div className="w-9 h-9 xs:w-10 xs:h-10 sm:w-12 sm:h-12 rounded-xl bg-black/60 border border-white/10 flex items-center justify-center transition-all duration-300 group-hover/tile:scale-110 group-hover/tile:border-purple-500/40 group-hover/tile:-translate-y-1 group-hover/tile:shadow-[0_0_20px_rgba(124,58,237,0.3)] shadow-lg">
                       <SkillIcon slug={tech.slug} name={tech.name} className="w-5 h-5 sm:w-6 sm:h-6" />
                     </div>
-                    <span className="text-[9px] xs:text-[9px] sm:text-[9px] font-bold text-text-secondary uppercase tracking-wider group-hover/tile:text-white transition-colors text-center leading-tight">{tech.name}</span>
+                    <span className="text-[9px] font-bold text-text-secondary uppercase tracking-wider group-hover/tile:text-white transition-colors text-center leading-tight truncate max-w-full">{tech.name}</span>
                   </div>
                 ))}
               </div>

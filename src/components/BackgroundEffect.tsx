@@ -30,10 +30,9 @@ export default function BackgroundEffect() {
 
     const getCount = () => {
       const w = window.innerWidth;
-      if (w < 420) return 60;
-      if (w < 768) return 100;
-      if (w < 1280) return 160;
-      return 220;
+      if (w < 768) return 0;
+      if (w < 1280) return 110;
+      return 160;
     };
 
     const CONN_DIST = 150;
