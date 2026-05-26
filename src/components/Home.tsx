@@ -150,25 +150,21 @@ const ContributionHeatmap = () => {
 export default function Home({ setActivePage }: Props) {
   const [scrollActive, setScrollActive] = useState(false);
   const [showResume, setShowResume] = useState(false);
-  const pedestalGlowRef = useRef<HTMLDivElement>(null);
+  const [parallaxY, setParallaxY] = useState(0);
+  const rafRef = useRef<number>(0);
 
   useEffect(() => {
     const handleScroll = () => {
       setScrollActive(window.scrollY > 100);
+      if (rafRef.current) cancelAnimationFrame(rafRef.current);
+      rafRef.current = requestAnimationFrame(() => {
+        setParallaxY(window.scrollY * 0.15);
+      });
     };
-    const handleMouse = (e: MouseEvent) => {
-      const el = pedestalGlowRef.current;
-      if (el) {
-        const x = (e.clientX / window.innerWidth) * 100;
-        const y = (e.clientY / window.innerHeight) * 100;
-        el.style.background = `radial-gradient(circle at ${x}% ${y}%, rgba(124,58,237,0.2), rgba(6,182,212,0.1), transparent)`;
-      }
-    };
-    window.addEventListener("scroll", handleScroll);
-    window.addEventListener("mousemove", handleMouse);
+    window.addEventListener("scroll", handleScroll, { passive: true });
     return () => {
       window.removeEventListener("scroll", handleScroll);
-      window.removeEventListener("mousemove", handleMouse);
+      if (rafRef.current) cancelAnimationFrame(rafRef.current);
     };
   }, []);
 
@@ -187,7 +183,7 @@ export default function Home({ setActivePage }: Props) {
     <motion.div variants={c} initial="hidden" animate="visible" className="relative flex flex-col gap-4 sm:gap-8 lg:gap-12 w-full pt-2 sm:pt-4">
 
       <div className="absolute -inset-x-3 sm:-inset-x-6 lg:-inset-x-8 -top-[80px] sm:-top-[100px] -bottom-[80px] sm:-bottom-[100px] z-0 pointer-events-none overflow-hidden select-none">
-        <div className="relative w-full h-full min-h-[600px] sm:min-h-[800px] lg:min-h-[900px]">
+        <div className="relative w-full h-full min-h-[600px] sm:min-h-[800px] lg:min-h-[900px]" style={{ transform: `translateY(${parallaxY}px)` }}>
           <Image
             src="/assets/hero_background.png"
             alt="Cosmic Background"
@@ -263,11 +259,9 @@ export default function Home({ setActivePage }: Props) {
           
           <div className="relative w-[180px] h-[240px] xs:w-[250px] xs:h-[330px] sm:w-[300px] sm:h-[390px] lg:w-[340px] lg:h-[440px] flex items-end justify-center z-10 -mt-2 xs:-mt-4 sm:-mt-6 max-w-full overflow-hidden">
             <div
-              ref={pedestalGlowRef}
               className="absolute inset-0 rounded-full opacity-30"
               style={{
                 background: `radial-gradient(circle at 50% 50%, rgba(124,58,237,0.3) 0%, rgba(6,182,212,0.15) 50%, transparent 80%)`,
-                transition: "background 0.3s ease-out",
               }}
             />
             <div className="hidden lg:block">
@@ -405,25 +399,34 @@ export default function Home({ setActivePage }: Props) {
         </motion.div>
       </div>
 
-        <motion.div variants={i} className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-2 sm:gap-4 w-full relative z-10">
+        <motion.div variants={i} className="relative z-10">
+        <div className="flex sm:grid sm:grid-cols-2 lg:grid-cols-4 gap-2 sm:gap-4 w-full overflow-x-auto snap-x snap-mandatory scrollbar-none pb-1 sm:pb-0 -mx-2 sm:mx-0 px-2 sm:px-0 scroll-smooth">
         {[
           { icon: <Code className="w-4 h-4 sm:w-5 sm:h-5 text-violet-400" />, title: "Clean Code", desc: "Maintainable & Scalable" },
           { icon: <Zap className="w-4 h-4 sm:w-5 sm:h-5 text-cyan-400" />, title: "Problem Solver", desc: "Turning ideas into real solutions" },
           { icon: <Star className="w-4 h-4 sm:w-5 sm:h-5 text-indigo-400" />, title: "Performance", desc: "Optimized for high performance" },
           { icon: <BookOpen className="w-4 h-4 sm:w-5 sm:h-5 text-purple-400" />, title: "Continuous Learner", desc: "Always exploring new technologies" },
         ].map((h, idx) => (
-          <TiltCard key={idx} intensity={4}>
-            <div className="glass-card-glow p-3 sm:p-4 lg:p-5 flex items-center gap-3 sm:gap-4 text-left group bg-black/30">
-              <div className="w-9 h-9 sm:w-10 sm:h-11 rounded-xl bg-white/[0.03] border border-white/10 flex items-center justify-center flex-shrink-0 group-hover:border-purple-500/40 group-hover:shadow-[0_0_15px_rgba(124,58,237,0.3)] transition-all">
-                {h.icon}
+          <div key={idx} className="snap-start shrink-0 w-[75vw] xs:w-[65vw] sm:w-auto sm:shrink">
+            <TiltCard intensity={4}>
+              <div className="glass-card-glow p-3 sm:p-4 lg:p-5 flex items-center gap-3 sm:gap-4 text-left group bg-black/30">
+                <div className="w-9 h-9 sm:w-10 sm:h-11 rounded-xl bg-white/[0.03] border border-white/10 flex items-center justify-center flex-shrink-0 group-hover:border-purple-500/40 group-hover:shadow-[0_0_15px_rgba(124,58,237,0.3)] transition-all">
+                  {h.icon}
+                </div>
+                <div className="min-w-0">
+                  <h3 className="font-display font-semibold text-xs sm:text-sm text-white leading-tight mb-0.5">{h.title}</h3>
+                  <p className="text-[11px] sm:text-[11px] text-text-secondary leading-tight">{h.desc}</p>
+                </div>
               </div>
-              <div className="min-w-0">
-                <h3 className="font-display font-semibold text-xs sm:text-sm text-white leading-tight mb-0.5">{h.title}</h3>
-                <p className="text-[11px] sm:text-[11px] text-text-secondary leading-tight">{h.desc}</p>
-              </div>
-            </div>
-          </TiltCard>
+            </TiltCard>
+          </div>
         ))}
+        </div>
+        <div className="flex justify-center gap-1.5 mt-2 sm:hidden">
+          {[0, 1, 2, 3].map((i) => (
+            <div key={i} className="w-1.5 h-1.5 rounded-full bg-white/20" />
+          ))}
+        </div>
       </motion.div>
 
       <motion.div variants={i} className="relative overflow-hidden w-full py-2 sm:py-3 z-10">

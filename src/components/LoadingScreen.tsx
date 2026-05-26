@@ -41,11 +41,8 @@ export default function LoadingScreen() {
           <div className="absolute w-[200px] h-[200px] rounded-full bg-cyan-500/5 blur-[60px] top-1/3 right-1/4" />
 
           <div className="relative flex items-center justify-center">
-            {/* Outer ring */}
-            <motion.div
-              className="absolute w-24 h-24 rounded-full"
-              animate={{ rotate: 360 }}
-              transition={{ duration: 3, repeat: Infinity, ease: "linear" }}
+            <div
+              className="absolute w-24 h-24 rounded-full animate-[spin_3s_linear_infinite]"
             >
               <div className="absolute inset-0 rounded-full border border-purple-500/20" />
               {[0, 60, 120, 180, 240, 300].map((deg, i) => (
@@ -61,13 +58,11 @@ export default function LoadingScreen() {
                   }}
                 />
               ))}
-            </motion.div>
+            </div>
 
-            {/* Middle ring */}
-            <motion.div
+            <div
               className="absolute w-16 h-16 rounded-full"
-              animate={{ rotate: -360 }}
-              transition={{ duration: 2, repeat: Infinity, ease: "linear" }}
+              style={{ animation: "spin 2s linear infinite reverse" }}
             >
               {[0, 90, 180, 270].map((deg, i) => (
                 <div key={i}
@@ -82,9 +77,8 @@ export default function LoadingScreen() {
                   }}
                 />
               ))}
-            </motion.div>
+            </div>
 
-            {/* Center glow */}
             <motion.div
               className="w-10 h-10 rounded-full bg-gradient-to-br from-purple-500 to-cyan-500 shadow-[0_0_30px_rgba(124,58,237,0.5)]"
               animate={{ scale: [1, 1.1, 1] }}
@@ -110,7 +104,6 @@ export default function LoadingScreen() {
               ))}
             </div>
 
-            {/* Progress bar */}
             <div className="mt-4 w-40 sm:w-48 h-1 rounded-full bg-white/5 overflow-hidden mx-auto">
               <motion.div
                 className="h-full rounded-full bg-gradient-to-r from-purple-500 to-cyan-500"

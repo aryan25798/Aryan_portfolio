@@ -26,8 +26,10 @@ body {
   font-family: var(--font-sans);
   overflow-x: hidden;
   min-height: 100vh;
+  min-height: 100dvh;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
+  -webkit-tap-highlight-color: transparent;
 }
 
 ::selection { background: rgba(124, 58, 237, 0.3); color: #fff; }
@@ -267,6 +269,46 @@ body {
 .animate-aurora-reverse { animation: aurora-reverse 15s ease-in-out infinite; }
 .animate-pulse-slow { animation: pulse 4s ease-in-out infinite; }
 .animate-glow-pulse { animation: glow-pulse 3s ease-in-out infinite; }
+
+.safe-area-bottom {
+  padding-bottom: env(safe-area-inset-bottom, 0px);
+}
+
+.micro-tap {
+  transition: transform 0.15s ease, box-shadow 0.15s ease;
+}
+.micro-tap:active {
+  transform: scale(0.96);
+}
+
+.micro-press {
+  transition: transform 0.1s ease;
+}
+.micro-press:active {
+  transform: scale(0.93);
+}
+
+.card-hover-lift {
+  transition: transform 0.35s cubic-bezier(0.16, 1, 0.3, 1), box-shadow 0.35s cubic-bezier(0.16, 1, 0.3, 1);
+}
+.card-hover-lift:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 12px 48px rgba(124, 58, 237, 0.15), 0 0 60px rgba(124, 58, 237, 0.05);
+}
+
+@media (hover: none) and (pointer: coarse) {
+  .card-hover-lift:hover {
+    transform: none;
+    box-shadow: none;
+  }
+  .card-hover-lift:active {
+    transform: scale(0.97);
+  }
+}
+
+.scrollbar-gutter-stable {
+  scrollbar-gutter: stable;
+}
 
 @media (max-width: 420px) {
   html { font-size: 13px; }

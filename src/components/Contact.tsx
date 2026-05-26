@@ -29,7 +29,6 @@ export default function Contact() {
   const [sending, setSending] = useState(false);
   const [status, setStatus] = useState<{ type: "success" | "error"; text: string } | null>(null);
   const [focused, setFocused] = useState<string | null>(null);
-  const [hoveredSocial, setHoveredSocial] = useState<number | null>(null);
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -208,17 +207,12 @@ export default function Contact() {
               </h4>
               <div className="flex gap-2 sm:gap-3 flex-wrap">
                 {socials.map((s, i) => (
-                  <motion.a key={i} href={s.href} target="_blank" rel="noopener noreferrer"
-                    onMouseEnter={() => setHoveredSocial(i)} onMouseLeave={() => setHoveredSocial(null)}
-                    className={`w-9 h-9 sm:w-10 sm:h-10 rounded-xl bg-white/5 border border-white/10 flex items-center justify-center text-text-secondary ${s.c} transition-all active:scale-90`}
-                    aria-label={s.href.split("/").pop() || "social"}
-                    whileHover={{ scale: 1.12 }}
-                    whileTap={{ scale: 0.92 }}
-                  >
-                    <motion.div animate={{ rotate: hoveredSocial === i ? 360 : 0 }} transition={{ duration: 0.4 }}>
-                      {s.icon}
-                    </motion.div>
-                  </motion.a>
+                    <a key={i} href={s.href} target="_blank" rel="noopener noreferrer"
+                      className={`w-9 h-9 sm:w-10 sm:h-10 rounded-xl bg-white/5 border border-white/10 flex items-center justify-center text-text-secondary ${s.c} transition-all active:scale-90 hover:scale-110`}
+                      aria-label={s.href.split("/").pop() || "social"}
+                    >
+                      <span className="transition-transform duration-300 hover:rotate-[360deg] inline-flex">{s.icon}</span>
+                    </a>
                 ))}
               </div>
             </div>

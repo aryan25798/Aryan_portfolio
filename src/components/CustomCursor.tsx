@@ -1,21 +1,15 @@
 "use client";
 
 import { useEffect, useState } from "react";
-import { motion, useMotionValue, useSpring } from "framer-motion";
 
 export default function CustomCursor() {
+  const [pos, setPos] = useState({ x: -100, y: -100 });
   const [visible, setVisible] = useState(false);
   const [hovering, setHovering] = useState(false);
-  const mouseX = useMotionValue(-100);
-  const mouseY = useMotionValue(-100);
-
-  const springX = useSpring(mouseX, { stiffness: 300, damping: 30 });
-  const springY = useSpring(mouseY, { stiffness: 300, damping: 30 });
 
   useEffect(() => {
     const onMouse = (e: MouseEvent) => {
-      mouseX.set(e.clientX);
-      mouseY.set(e.clientY);
+      setPos({ x: e.clientX, y: e.clientY });
       if (!visible) setVisible(true);
     };
     const onLeave = () => setVisible(false);
@@ -44,54 +38,43 @@ export default function CustomCursor() {
         el.removeEventListener("mouseleave", onLeaveHandler);
       });
     };
-  }, [mouseX, mouseY, visible]);
+  }, [visible]);
 
   if (typeof window === "undefined") return null;
 
+  const size = hovering ? 120 : 60;
+
   return (
     <>
-      <motion.div
-        className="pointer-events-none fixed z-[9999] hidden lg:block"
+      <div
+        className="pointer-events-none fixed z-[9999] hidden lg:block transition-[width,height] duration-300 ease-out"
         style={{
-          left: springX,
-          top: springY,
-          x: "-50%",
-          y: "-50%",
+          left: pos.x,
+          top: pos.y,
+          width: hovering ? 28 : 16,
+          height: hovering ? 28 : 16,
+          transform: "translate(-50%, -50%)",
+          borderRadius: "50%",
+          background: hovering ? "rgba(124,58,237,0.15)" : "rgba(124,58,237,0.08)",
+          border: "1.5px solid rgba(124,58,237,0.3)",
+          boxShadow: "0 0 12px rgba(124,58,237,0.15)",
+          backdropFilter: "blur(4px)",
+          WebkitBackdropFilter: "blur(4px)",
+          transitionProperty: "width, height, background, border-color",
         }}
-      >
-        <motion.div
-          className="w-4 h-4 rounded-full"
-          animate={{
-            scale: hovering ? 2.5 : 1,
-            background: hovering
-              ? "rgba(124,58,237,0.15)"
-              : "rgba(124,58,237,0.08)",
-            borderColor: hovering
-              ? "rgba(124,58,237,0.5)"
-              : "rgba(124,58,237,0.3)",
-          }}
-          transition={{ duration: 0.2 }}
-          style={{
-            border: "1.5px solid rgba(124,58,237,0.3)",
-            boxShadow: "0 0 12px rgba(124,58,237,0.15), inset 0 0 12px rgba(124,58,237,0.05)",
-            backdropFilter: "blur(4px)",
-          }}
-        />
-      </motion.div>
-      <motion.div
-        className="pointer-events-none fixed z-[9998] hidden lg:block"
+      />
+      <div
+        className="pointer-events-none fixed z-[9998] hidden lg:block transition-[width,height] duration-300 ease-out"
         style={{
-          left: springX,
-          top: springY,
-          x: "-50%",
-          y: "-50%",
-          width: hovering ? 120 : 60,
-          height: hovering ? 120 : 60,
+          left: pos.x,
+          top: pos.y,
+          width: size,
+          height: size,
+          transform: "translate(-50%, -50%)",
           borderRadius: "50%",
           background: hovering
             ? "radial-gradient(circle, rgba(124,58,237,0.06) 0%, transparent 70%)"
             : "radial-gradient(circle, rgba(124,58,237,0.03) 0%, transparent 70%)",
-          transition: "width 0.3s, height 0.3s",
         }}
       />
     </>

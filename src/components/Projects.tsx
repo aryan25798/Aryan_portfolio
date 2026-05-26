@@ -2,7 +2,7 @@
 
 import React, { useState, useMemo } from "react";
 import { motion, AnimatePresence } from "framer-motion";
-import { Star, GitFork, Globe, ExternalLink, Rocket } from "lucide-react";
+import { Star, GitFork, Globe, ExternalLink, Rocket, ArrowUpDown, Filter } from "lucide-react";
 import type { GithubRepo } from "@/lib/github";
 import { useGitHub } from "@/lib/useGitHub";
 import TiltCard from "./TiltCard";
@@ -20,6 +20,13 @@ const CARD_BGS: Record<string, string> = {
   CSS: "from-violet-700/20 via-violet-600/5", Shell: "from-lime-700/20 via-lime-600/5",
   Dockerfile: "from-sky-800/20 via-sky-700/5",
 };
+
+const sortOptions = [
+  { value: "stars", label: "Stars" },
+  { value: "updated", label: "Recent" },
+  { value: "name", label: "Name" },
+  { value: "forks", label: "Forks" },
+] as const;
 
 const stagger = {
   hidden: { opacity: 0 },
@@ -54,7 +61,6 @@ function ProjectCard({ repo }: { repo: GithubRepo }) {
               style={{ background: `radial-gradient(circle, ${langColor}18 0%, transparent 60%)` }}
             />
 
-            {/* Preview area */}
             <a href={repo.html_url} target="_blank" rel="noopener noreferrer" className="block relative h-28 sm:h-32 lg:h-36 overflow-hidden">
               <div className="absolute inset-0 transition-transform duration-700 group-hover/card:scale-105"
                 style={{ background: `linear-gradient(160deg, ${langColor}30 0%, ${langColor}08 40%, transparent 65%)` }}
@@ -91,7 +97,6 @@ function ProjectCard({ repo }: { repo: GithubRepo }) {
               </div>
             </a>
 
-            {/* Body */}
             <div className="p-3 sm:p-4 flex flex-col gap-2">
               <p className="text-[10px] sm:text-[11px] text-text-secondary leading-relaxed line-clamp-2 min-h-[2.4em]">
                 {repo.description || "No description provided."}
@@ -162,7 +167,6 @@ function FeaturedCard({ repo }: { repo: GithubRepo }) {
               style={{ background: `radial-gradient(800px circle at 30% 30%, ${langColor}20 0%, transparent 60%)` }}
             />
 
-            {/* Preview */}
             <a href={repo.html_url} target="_blank" rel="noopener noreferrer" className="block relative h-32 sm:h-40 lg:h-48 overflow-hidden">
               <div className="absolute inset-0 transition-transform duration-700 group-hover/card:scale-105"
                 style={{ background: `linear-gradient(160deg, ${langColor}35 0%, ${langColor}08 30%, transparent 60%)` }}
@@ -198,7 +202,6 @@ function FeaturedCard({ repo }: { repo: GithubRepo }) {
               </div>
             </a>
 
-            {/* Details */}
             <div className="px-3 sm:px-4 pb-3 sm:pb-4">
               <div className="flex items-center gap-3 sm:gap-4 flex-wrap mt-2 sm:mt-3">
                 <span className="flex items-center gap-1 text-[10px] sm:text-xs text-amber-400/80"><Star className="w-3 h-3" /> {repo.stargazers_count}</span>
@@ -229,24 +232,47 @@ function FeaturedCard({ repo }: { repo: GithubRepo }) {
 export default function Projects() {
   const { repos, loading } = useGitHub();
   const [search, setSearch] = useState("");
+  const [langFilter, setLangFilter] = useState("All");
+  const [sortBy, setSortBy] = useState<"stars" | "updated" | "name" | "forks">("stars");
+  const [showSort, setShowSort] = useState(false);
+  const [showLang, setShowLang] = useState(false);
 
-  const sorted = useMemo(
-    () => [...repos].sort((a, b) => b.stargazers_count - a.stargazers_count),
-    [repos]
-  );
+  const languages = useMemo(() => {
+    const langs = new Set(repos.map((r) => r.language).filter(Boolean) as string[]);
+    return ["All", ...Array.from(langs).sort()];
+  }, [repos]);
 
-  const filtered = useMemo(() => {
-    if (!search.trim()) return sorted;
-    const q = search.toLowerCase();
-    return sorted.filter(
-      (r) =>
-        r.name.toLowerCase().includes(q) ||
-        (r.description || "").toLowerCase().includes(q) ||
-        (r.topics || []).some((t) => t.toLowerCase().includes(q))
-    );
-  }, [sorted, search]);
+  const processed = useMemo(() => {
+    let list = [...repos];
 
-  const [featured, ...rest] = filtered;
+    if (langFilter !== "All") {
+      list = list.filter((r) => r.language === langFilter);
+    }
+
+    if (search.trim()) {
+      const q = search.toLowerCase();
+      list = list.filter(
+        (r) =>
+          r.name.toLowerCase().includes(q) ||
+          (r.description || "").toLowerCase().includes(q) ||
+          (r.topics || []).some((t) => t.toLowerCase().includes(q))
+      );
+    }
+
+    list.sort((a, b) => {
+      switch (sortBy) {
+        case "stars": return b.stargazers_count - a.stargazers_count;
+        case "updated": return new Date(b.pushed_at).getTime() - new Date(a.pushed_at).getTime();
+        case "name": return a.name.localeCompare(b.name);
+        case "forks": return b.forks_count - a.forks_count;
+        default: return 0;
+      }
+    });
+
+    return list;
+  }, [repos, langFilter, search, sortBy]);
+
+  const [featured, ...rest] = processed;
 
   if (loading) {
     return (
@@ -264,29 +290,77 @@ export default function Projects() {
   return (
     <motion.div variants={stagger} initial="hidden" animate="show" className="flex flex-col gap-2 w-full text-left">
 
-      {/* Slim top bar */}
-      <motion.div variants={cardUp} className="flex items-center justify-between gap-2 pb-1.5 border-b border-white/5">
+      <motion.div variants={cardUp} className="flex flex-wrap items-center justify-between gap-2 pb-1.5 border-b border-white/5">
         <div className="flex items-center gap-2">
           <span className="w-2 h-2 rounded-full bg-purple-500 shadow-[0_0_10px_rgba(124,58,237,0.5)]" />
           <h2 className="font-display font-black text-sm sm:text-base lg:text-lg text-white">Projects</h2>
-          <span className="text-[7px] sm:text-[8px] text-text-secondary font-mono bg-white/5 px-1.5 py-0.5 rounded-full border border-white/10">{sorted.length}</span>
+          <span className="text-[7px] sm:text-[8px] text-text-secondary font-mono bg-white/5 px-1.5 py-0.5 rounded-full border border-white/10">{processed.length}</span>
         </div>
-        <input type="text" placeholder="Search..." value={search}
-          onChange={(e) => setSearch(e.target.value)}
-          className="w-[110px] sm:w-[160px] bg-white/5 border border-white/10 rounded-lg py-1 px-2.5 text-[9px] sm:text-[10px] text-white placeholder:text-text-secondary/40 focus:outline-none focus:border-purple-500/40 transition-all"
-        />
+
+        <div className="flex items-center gap-1.5 flex-wrap">
+          <input type="text" placeholder="Search..." value={search}
+            onChange={(e) => setSearch(e.target.value)}
+            className="w-[90px] sm:w-[120px] bg-white/5 border border-white/10 rounded-lg py-1 px-2 text-[9px] sm:text-[10px] text-white placeholder:text-text-secondary/40 focus:outline-none focus:border-purple-500/40 transition-all"
+          />
+
+          <div className="relative">
+            <button onClick={() => { setShowLang(!showLang); setShowSort(false); }}
+              className="flex items-center gap-1 px-2 py-1 rounded-lg bg-white/5 border border-white/10 text-[9px] sm:text-[10px] text-text-secondary hover:text-white transition-all active:scale-90"
+            >
+              <Filter className="w-3 h-3" />
+              <span className="hidden xs:inline">{langFilter === "All" ? "Lang" : langFilter}</span>
+            </button>
+            {showLang && (
+              <>
+                <div className="fixed inset-0 z-10" onClick={() => setShowLang(false)} />
+                <div className="absolute right-0 top-full mt-1 z-20 w-[130px] sm:w-[150px] bg-[#0d0924]/95 backdrop-blur-xl border border-white/10 rounded-xl overflow-hidden shadow-2xl">
+                  {languages.map((l) => (
+                    <button key={l} onClick={() => { setLangFilter(l); setShowLang(false); }}
+                      className={`w-full text-left px-3 py-1.5 text-[10px] sm:text-xs font-semibold transition-all hover:bg-white/5 ${
+                        langFilter === l ? "text-purple-400 bg-purple-500/10" : "text-text-secondary"
+                      }`}
+                    >{l}</button>
+                  ))}
+                </div>
+              </>
+            )}
+          </div>
+
+          <div className="relative">
+            <button onClick={() => { setShowSort(!showSort); setShowLang(false); }}
+              className="flex items-center gap-1 px-2 py-1 rounded-lg bg-white/5 border border-white/10 text-[9px] sm:text-[10px] text-text-secondary hover:text-white transition-all active:scale-90"
+            >
+              <ArrowUpDown className="w-3 h-3" />
+              <span className="hidden xs:inline">{sortOptions.find(o => o.value === sortBy)?.label}</span>
+            </button>
+            {showSort && (
+              <>
+                <div className="fixed inset-0 z-10" onClick={() => setShowSort(false)} />
+                <div className="absolute right-0 top-full mt-1 z-20 w-[110px] sm:w-[130px] bg-[#0d0924]/95 backdrop-blur-xl border border-white/10 rounded-xl overflow-hidden shadow-2xl">
+                  {sortOptions.map((o) => (
+                    <button key={o.value} onClick={() => { setSortBy(o.value); setShowSort(false); }}
+                      className={`w-full text-left px-3 py-1.5 text-[10px] sm:text-xs font-semibold transition-all hover:bg-white/5 ${
+                        sortBy === o.value ? "text-cyan-400 bg-cyan-500/10" : "text-text-secondary"
+                      }`}
+                    >{o.label}</button>
+                  ))}
+                </div>
+              </>
+            )}
+          </div>
+        </div>
       </motion.div>
 
       <AnimatePresence mode="wait">
-        {filtered.length === 0 ? (
+        {processed.length === 0 ? (
           <motion.div key="empty" initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }}
             className="glass-card p-8 sm:p-10 text-center flex flex-col items-center justify-center min-h-[120px] sm:min-h-[160px]"
           >
             <h4 className="font-display font-bold text-white text-sm sm:text-base">No projects match</h4>
-            <p className="text-[11px] sm:text-xs text-text-secondary mt-1">Try a different search term.</p>
+            <p className="text-[11px] sm:text-xs text-text-secondary mt-1">Try adjusting filters or search term.</p>
           </motion.div>
         ) : (
-          <motion.div key={search} variants={stagger} initial="hidden" animate="show" className="flex flex-col gap-2 sm:gap-3">
+          <motion.div key={`${langFilter}-${sortBy}-${search}`} variants={stagger} initial="hidden" animate="show" className="flex flex-col gap-2 sm:gap-3">
             {featured && <FeaturedCard repo={featured} />}
             {rest.length > 0 && (
               <div className="grid grid-cols-1 sm:grid-cols-2 xl:grid-cols-3 gap-2 sm:gap-3">

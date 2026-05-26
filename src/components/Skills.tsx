@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useState, useRef, useEffect } from "react";
+import React, { useState } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import { Layers, Code, Terminal, Database, Cloud, Settings } from "lucide-react";
 import { useGitHub } from "@/lib/useGitHub";
@@ -46,36 +46,23 @@ const skillData = [
   { n: "Salesforce", l: "Expert", c: "salesforce", col: "text-cyan-400", g: "#06b6d4", slug: "salesforce" },
 ];
 
+const S = 44;
+const SW = 2.5;
+const R = (S - SW) / 2;
+const C = 2 * Math.PI * R;
+
 const SkillRing = ({ progress, color }: { progress: number; color: string }) => {
-  const ref = useRef<HTMLDivElement>(null);
-  const [size, setSize] = useState(40);
-
-  useEffect(() => {
-    const el = ref.current;
-    if (!el) return;
-    const obs = new ResizeObserver((entries) => {
-      for (const e of entries) {
-        setSize(e.contentRect.width);
-      }
-    });
-    obs.observe(el);
-    return () => obs.disconnect();
-  }, []);
-
-  const strokeWidth = 2.5;
-  const radius = (size - strokeWidth) / 2;
-  const circumference = 2 * Math.PI * radius;
-  const targetOffset = circumference - (progress / 100) * circumference;
+  const targetOffset = C - (progress / 100) * C;
 
   return (
-    <div ref={ref} className="absolute inset-0 flex items-center justify-center">
-      <svg width={size} height={size} className="absolute -rotate-90">
-        <circle cx={size / 2} cy={size / 2} r={radius} fill="none" stroke="rgba(255,255,255,0.05)" strokeWidth={strokeWidth} />
+    <div className="absolute inset-0 flex items-center justify-center">
+      <svg width={S} height={S} className="absolute -rotate-90" viewBox={`0 0 ${S} ${S}`}>
+        <circle cx={S / 2} cy={S / 2} r={R} fill="none" stroke="rgba(255,255,255,0.05)" strokeWidth={SW} />
         <motion.circle
-          cx={size / 2} cy={size / 2} r={radius} fill="none"
-          stroke={color} strokeWidth={strokeWidth} strokeLinecap="round"
-          strokeDasharray={circumference}
-          initial={{ strokeDashoffset: circumference }}
+          cx={S / 2} cy={S / 2} r={R} fill="none"
+          stroke={color} strokeWidth={SW} strokeLinecap="round"
+          strokeDasharray={C}
+          initial={{ strokeDashoffset: C }}
           animate={{ strokeDashoffset: targetOffset }}
           transition={{ duration: 1.5, ease: [0.16, 1, 0.3, 1], delay: 0.3 }}
         />
