@@ -41,9 +41,7 @@ export default function LoadingScreen() {
           <div className="absolute w-[200px] h-[200px] rounded-full bg-cyan-500/5 blur-[60px] top-1/3 right-1/4" />
 
           <div className="relative flex items-center justify-center">
-            <div
-              className="absolute w-24 h-24 rounded-full animate-[spin_3s_linear_infinite]"
-            >
+            <div className="absolute w-24 h-24 rounded-full animate-[spin_3s_linear_infinite]">
               <div className="absolute inset-0 rounded-full border border-purple-500/20" />
               {[0, 60, 120, 180, 240, 300].map((deg, i) => (
                 <div key={i}
@@ -60,10 +58,7 @@ export default function LoadingScreen() {
               ))}
             </div>
 
-            <div
-              className="absolute w-16 h-16 rounded-full"
-              style={{ animation: "spin 2s linear infinite reverse" }}
-            >
+            <div className="absolute w-16 h-16 rounded-full" style={{ animation: "spin 2s linear infinite reverse" }}>
               {[0, 90, 180, 270].map((deg, i) => (
                 <div key={i}
                   className="absolute w-1 h-1 rounded-full bg-cyan-400"
@@ -79,27 +74,19 @@ export default function LoadingScreen() {
               ))}
             </div>
 
-            <motion.div
-              className="w-10 h-10 rounded-full bg-gradient-to-br from-purple-500 to-cyan-500 shadow-[0_0_30px_rgba(124,58,237,0.5)]"
-              animate={{ scale: [1, 1.1, 1] }}
-              transition={{ duration: 1.5, repeat: Infinity, ease: "easeInOut" }}
-            />
+            <div className="w-10 h-10 rounded-full bg-gradient-to-br from-purple-500 to-cyan-500 shadow-[0_0_30px_rgba(124,58,237,0.5)] animate-pulse-scale" />
           </div>
 
-          <motion.div
-            initial={{ opacity: 0, y: 10 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ delay: 0.3 }}
+          <div
             className="mt-10 text-center"
+            style={{ animation: "fade-in-up 0.5s ease-out 0.3s both" }}
           >
             <p className="font-display font-bold text-lg text-white tracking-wider">Aryan</p>
             <div className="flex items-center gap-1 mt-3">
               {[0, 0.2, 0.4].map((delay, i) => (
-                <motion.div
-                  key={i}
-                  className="w-1.5 h-1.5 rounded-full bg-purple-500"
-                  animate={{ opacity: [0, 1, 0], scale: [0.8, 1.2, 0.8] }}
-                  transition={{ duration: 1, repeat: Infinity, delay }}
+                <div key={i}
+                  className="w-1.5 h-1.5 rounded-full bg-purple-500 animate-pulse-dot"
+                  style={{ animationDelay: `${delay}s` }}
                 />
               ))}
             </div>
@@ -115,7 +102,7 @@ export default function LoadingScreen() {
             <p className="text-[10px] text-text-secondary mt-2 font-mono">
               {Math.min(Math.floor(progress), 100)}%
             </p>
-          </motion.div>
+          </div>
         </motion.div>
       )}
     </AnimatePresence>

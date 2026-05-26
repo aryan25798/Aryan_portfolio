@@ -10,16 +10,11 @@ const i = { hidden: { opacity: 0, x: -20 }, visible: { opacity: 1, x: 0, transit
 
 const FlowingLine = () => (
   <div className="absolute left-0 top-0 bottom-0 w-px overflow-hidden">
-    <motion.div
-      className="absolute inset-0 w-full"
-      initial={{ backgroundPosition: "0 0" }}
-      animate={{ backgroundPosition: "0 100%" }}
-      transition={{ duration: 3, repeat: Infinity, ease: "linear" }}
-      style={{
-        background: "linear-gradient(180deg, rgba(124,58,237,0.8), rgba(6,182,212,0.8), rgba(124,58,237,0.8))",
-        backgroundSize: "100% 200%",
-      }}
-    />
+    <div className="absolute inset-0 w-full" style={{
+      background: "linear-gradient(180deg, rgba(124,58,237,0.8), rgba(6,182,212,0.8), rgba(124,58,237,0.8))",
+      backgroundSize: "100% 200%",
+      animation: "flow-line 3s linear infinite",
+    }} />
     <div className="absolute inset-0 w-full opacity-30" style={{
       background: "linear-gradient(180deg, transparent 0%, rgba(124,58,237,0.3) 50%, transparent 100%)",
       backgroundSize: "100% 200%",

@@ -42,11 +42,7 @@ export default function Sidebar({ activePage, setActivePage, onMenuToggle }: Pro
         className="w-8 h-8 sm:w-9 sm:h-9 lg:w-11 lg:h-11 rounded-xl flex items-center justify-center border border-purple-500/30 bg-purple-500/10 hover:border-purple-500 transition-all hover:shadow-[0_0_20px_rgba(124,58,237,0.4)] relative group"
         aria-label="Home"
       >
-        <motion.span
-          animate={{ textShadow: ["0 0 0px rgba(124,58,237,0)", "0 0 10px rgba(124,58,237,0.6)", "0 0 0px rgba(124,58,237,0)"] }}
-          transition={{ duration: 3, repeat: Infinity, ease: "easeInOut" }}
-          className="font-display font-extrabold text-sm sm:text-base lg:text-lg text-white"
-        >A</motion.span>
+        <span className="font-display font-extrabold text-sm sm:text-base lg:text-lg text-white animate-text-glow-pulse">A</span>
       </motion.button>
 
       <nav className="flex flex-col gap-1.5 sm:gap-2 lg:gap-3 w-full px-1.5 sm:px-2 lg:px-3">
@@ -63,12 +59,9 @@ export default function Sidebar({ activePage, setActivePage, onMenuToggle }: Pro
             }`}
             aria-label={item.label}
           >
-            <motion.span
-              animate={activePage === item.id ? { scale: [1, 1.1, 1] } : { scale: 1 }}
-              transition={{ duration: 2, repeat: activePage === item.id ? Infinity : 0 }}
-            >
+            <span className={activePage === item.id ? "inline-flex animate-pulse-scale" : "inline-flex"}>
               {item.icon}
-            </motion.span>
+            </span>
             <span className="absolute left-10 sm:left-11 lg:left-14 px-2 sm:px-3 py-1 sm:py-1.5 rounded-lg bg-[#0a0720]/95 text-text-primary text-[10px] sm:text-[11px] font-semibold opacity-0 translate-x-2 pointer-events-none group-hover:opacity-100 group-hover:translate-x-0 transition-all duration-300 border border-white/5 backdrop-blur-sm shadow-xl whitespace-nowrap z-[60]">
               <span className="flex items-center gap-1.5">
                 <span className={`w-1.5 h-1.5 rounded-full ${activePage === item.id ? "bg-purple-500 animate-pulse" : "bg-white/20"}`} />

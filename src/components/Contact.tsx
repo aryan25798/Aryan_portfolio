@@ -165,14 +165,13 @@ export default function Contact() {
                       </linearGradient>
                     </defs>
                   </svg>
-                  <motion.div
-                    className="absolute bottom-2 text-[8px] sm:text-[9px] font-bold text-emerald-400 bg-emerald-400/10 border border-emerald-400/20 px-2 py-1 rounded-full uppercase tracking-wider flex items-center gap-1 shadow-[0_0_10px_rgba(16,185,129,0.2)]"
-                    animate={{ boxShadow: ["0 0 10px rgba(16,185,129,0.2)", "0 0 25px rgba(16,185,129,0.4)", "0 0 10px rgba(16,185,129,0.2)"] }}
-                    transition={{ duration: 2, repeat: Infinity }}
+                  <div
+                    className="absolute bottom-2 text-[8px] sm:text-[9px] font-bold text-emerald-400 bg-emerald-400/10 border border-emerald-400/20 px-2 py-1 rounded-full uppercase tracking-wider flex items-center gap-1"
+                    style={{ animation: "glow-pulse-emerald 2s ease-in-out infinite" }}
                   >
                     <span className="w-1.5 h-1.5 rounded-full bg-emerald-400 animate-ping" />
                     Available
-                  </motion.div>
+                  </div>
                 </div>
               </div>
             </div>

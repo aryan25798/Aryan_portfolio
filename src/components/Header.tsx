@@ -42,13 +42,9 @@ export default function Header({ activePage, setActivePage, mobileMenuOpen, onMe
     <>
       <header className="fixed top-0 left-0 md:left-20 right-0 h-[56px] sm:h-[72px] z-40 bg-[#050816]/70 border-b border-white/5 flex items-center justify-between px-2 sm:px-6 lg:px-8 backdrop-blur-2xl shadow-[0_1px_30px_rgba(0,0,0,0.3)]">
         <button onClick={() => handleNav("home")} className="flex items-center gap-1 font-display font-black text-base sm:text-xl lg:text-2xl tracking-wider text-white hover:opacity-80 transition-opacity min-w-0 flex-shrink-0 group">
-          <motion.span
-            animate={{ textShadow: ["0 0 0px rgba(124,58,237,0)", "0 0 15px rgba(124,58,237,0.5)", "0 0 0px rgba(124,58,237,0)"] }}
-            transition={{ duration: 3, repeat: Infinity, ease: "easeInOut" }}
-            className="relative"
-          >
+          <span className="relative animate-text-glow-pulse">
             A<span className="text-purple-500">.</span>
-          </motion.span>
+          </span>
           <span className="text-[10px] font-mono font-normal text-text-secondary ml-1 hidden xs:inline opacity-70 group-hover:opacity-100 transition-opacity">&lt;dev /&gt;</span>
         </button>
 

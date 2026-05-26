@@ -4,16 +4,17 @@ import { useEffect, useRef } from "react";
 
 export default function BackgroundEffect() {
   const canvasRef = useRef<HTMLCanvasElement>(null);
+  const isMobile = typeof window !== "undefined" && window.innerWidth < 768;
+  const isSlow = typeof window !== "undefined" && window.innerWidth < 1280;
 
   useEffect(() => {
+    if (isMobile) return;
     const canvas = canvasRef.current;
     if (!canvas) return;
     const ctx = canvas.getContext("2d");
     if (!ctx) return;
 
     let animId: number;
-    const isMobile = window.innerWidth < 768;
-    const isSlow = window.innerWidth < 1280;
     const mouse = { x: -1000, y: -1000 };
 
     let particles: Array<{
@@ -21,17 +22,13 @@ export default function BackgroundEffect() {
       r: number; a: number; speed: number; up: boolean; baseA: number;
     }> = [];
 
-    const particleCount = isMobile ? 0 : isSlow ? 60 : 100;
-    const connDist = isMobile ? 0 : isSlow ? 100 : 150;
+    const count = isSlow ? 60 : 100;
+    const connDist = isSlow ? 100 : 150;
 
     const resize = () => {
       canvas.width = window.innerWidth;
       canvas.height = window.innerHeight;
-      init();
-    };
-
-    const init = () => {
-      particles = Array.from({ length: particleCount }, () => ({
+      particles = Array.from({ length: count }, () => ({
         x: Math.random() * canvas.width,
         y: Math.random() * canvas.height,
         vx: (Math.random() - 0.5) * 0.2,
@@ -44,14 +41,13 @@ export default function BackgroundEffect() {
       }));
     };
 
-    let starSpawnTimer = 0;
+    let starTimer = 0;
     const shootingStars: Array<{
       x: number; y: number; length: number; speed: number;
       opacity: number; angle: number; life: number; maxLife: number;
     }> = [];
 
-    const spawnShootingStar = () => {
-      if (isMobile) return;
+    const spawnStar = () => {
       shootingStars.push({
         x: Math.random() * canvas.width,
         y: Math.random() * canvas.height * 0.3,
@@ -67,45 +63,35 @@ export default function BackgroundEffect() {
     const draw = () => {
       ctx.clearRect(0, 0, canvas.width, canvas.height);
 
-      if (!isMobile) {
-        starSpawnTimer++;
-        if (starSpawnTimer > 100 + Math.random() * 100) {
-          spawnShootingStar();
-          starSpawnTimer = 0;
-        }
-
-        for (let i = shootingStars.length - 1; i >= 0; i--) {
-          const s = shootingStars[i];
-          s.life++;
-          s.x -= Math.cos(s.angle) * s.speed;
-          s.y += Math.sin(s.angle) * s.speed;
-          const lifeRatio = 1 - s.life / s.maxLife;
-          s.opacity = lifeRatio * 0.8;
-
-          ctx.beginPath();
-          ctx.moveTo(s.x, s.y);
-          ctx.lineTo(
-            s.x + Math.cos(s.angle) * s.length * lifeRatio,
-            s.y - Math.sin(s.angle) * s.length * lifeRatio
-          );
-          ctx.strokeStyle = `rgba(255,255,255,${s.opacity * 0.4})`;
-          ctx.lineWidth = 1.5;
-          ctx.stroke();
-
-          ctx.beginPath();
-          ctx.arc(s.x, s.y, 2, 0, Math.PI * 2);
-          ctx.fillStyle = `rgba(255, 255, 255, ${s.opacity})`;
-          ctx.fill();
-
-          if (s.life >= s.maxLife || s.x < -100 || s.y > canvas.height + 100) {
-            shootingStars.splice(i, 1);
-          }
-        }
+      starTimer++;
+      if (starTimer > 100 + Math.random() * 100) {
+        spawnStar();
+        starTimer = 0;
       }
 
-      for (let i = 0; i < particles.length; i++) {
-        const p = particles[i];
+      for (let i = shootingStars.length - 1; i >= 0; i--) {
+        const s = shootingStars[i];
+        s.life++;
+        s.x -= Math.cos(s.angle) * s.speed;
+        s.y += Math.sin(s.angle) * s.speed;
+        const lifeRatio = 1 - s.life / s.maxLife;
+        s.opacity = lifeRatio * 0.8;
+        ctx.beginPath();
+        ctx.moveTo(s.x, s.y);
+        ctx.lineTo(s.x + Math.cos(s.angle) * s.length * lifeRatio, s.y - Math.sin(s.angle) * s.length * lifeRatio);
+        ctx.strokeStyle = `rgba(255,255,255,${s.opacity * 0.4})`;
+        ctx.lineWidth = 1.5;
+        ctx.stroke();
+        ctx.beginPath();
+        ctx.arc(s.x, s.y, 2, 0, Math.PI * 2);
+        ctx.fillStyle = `rgba(255, 255, 255, ${s.opacity})`;
+        ctx.fill();
+        if (s.life >= s.maxLife || s.x < -100 || s.y > canvas.height + 100) shootingStars.splice(i, 1);
+      }
 
+      const len = particles.length;
+      for (let i = 0; i < len; i++) {
+        const p = particles[i];
         const dx = mouse.x - p.x;
         const dy = mouse.y - p.y;
         const dist = Math.sqrt(dx * dx + dy * dy);
@@ -113,60 +99,47 @@ export default function BackgroundEffect() {
           p.vx -= (dx / dist) * 0.005;
           p.vy -= (dy / dist) * 0.005;
         }
-
         p.vx += (Math.random() - 0.5) * 0.008;
         p.vy += (Math.random() - 0.5) * 0.008;
         p.vx *= 0.97;
         p.vy *= 0.97;
-
         p.x += p.vx;
         p.y += p.vy;
-
         if (p.x < 0) p.x = canvas.width;
         if (p.x > canvas.width) p.x = 0;
         if (p.y < 0) p.y = canvas.height;
         if (p.y > canvas.height) p.y = 0;
-
         if (p.up) { p.a += p.speed; if (p.a >= p.baseA + 0.35) p.up = false; }
         else { p.a -= p.speed; if (p.a <= p.baseA - 0.1) p.up = true; }
-
         ctx.beginPath();
         ctx.arc(p.x, p.y, p.r, 0, Math.PI * 2);
         ctx.fillStyle = `rgba(124,58,237,${p.a})`;
         ctx.fill();
 
-        if (!isSlow && connDist > 0) {
-          for (let j = i + 1; j < particles.length; j++) {
+        if (!isSlow) {
+          for (let j = i + 1; j < len; j++) {
             const p2 = particles[j];
             const dx2 = p.x - p2.x;
             const dy2 = p.y - p2.y;
             const distSq = dx2 * dx2 + dy2 * dy2;
             if (distSq < connDist * connDist) {
-              const dist2 = Math.sqrt(distSq);
-              const alpha = 0.04 * (1 - dist2 / connDist);
+              const d = Math.sqrt(distSq);
               ctx.beginPath();
               ctx.moveTo(p.x, p.y);
               ctx.lineTo(p2.x, p2.y);
-              ctx.strokeStyle = `rgba(124,58,237,${alpha})`;
+              ctx.strokeStyle = `rgba(124,58,237,${0.04 * (1 - d / connDist)})`;
               ctx.lineWidth = 0.6;
               ctx.stroke();
             }
           }
         }
       }
-
       animId = requestAnimationFrame(draw);
     };
 
-    const onMouse = (e: MouseEvent) => {
-      mouse.x = e.clientX;
-      mouse.y = e.clientY;
-    };
-
+    const onMouse = (e: MouseEvent) => { mouse.x = e.clientX; mouse.y = e.clientY; };
     window.addEventListener("resize", resize);
-    if (!isMobile) {
-      window.addEventListener("mousemove", onMouse);
-    }
+    window.addEventListener("mousemove", onMouse);
     resize();
     draw();
 
@@ -175,7 +148,7 @@ export default function BackgroundEffect() {
       window.removeEventListener("resize", resize);
       window.removeEventListener("mousemove", onMouse);
     };
-  }, []);
+  }, [isMobile, isSlow]);
 
   return (
     <div className="fixed inset-0 z-0 overflow-hidden pointer-events-none select-none">
@@ -185,7 +158,7 @@ export default function BackgroundEffect() {
       <div className="absolute top-[40%] right-[5%] w-[350px] sm:w-[500px] lg:w-[700px] h-[350px] sm:h-[500px] lg:h-[700px] rounded-full animate-aurora-reverse" style={{ background: "radial-gradient(circle, rgba(6,182,212,0.08) 0%, rgba(59,130,246,0.02) 40%, transparent 80%)" }} />
       <div className="absolute bottom-[10%] left-[30%] w-[300px] sm:w-[400px] lg:w-[600px] h-[300px] sm:h-[400px] lg:h-[600px] rounded-full animate-aurora" style={{ background: "radial-gradient(circle, rgba(168,85,247,0.06) 0%, rgba(124,58,237,0.02) 40%, transparent 80%)", animationDelay: "-4s" }} />
 
-      <canvas ref={canvasRef} className="absolute inset-0 w-full h-full" style={{ zIndex: 1, willChange: "transform" }} />
+      {!isMobile && <canvas ref={canvasRef} className="absolute inset-0 w-full h-full" style={{ zIndex: 1, willChange: "transform" }} />}
 
       <div className="absolute inset-0 opacity-[0.015] pointer-events-none" style={{ zIndex: 2, backgroundImage: "linear-gradient(rgba(124,58,237,0.3) 1px, transparent 1px), linear-gradient(90deg, rgba(124,58,237,0.3) 1px, transparent 1px)", backgroundSize: "60px 60px" }} />
 

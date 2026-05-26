@@ -62,39 +62,37 @@ const FloatingBadge = ({ children, className, orbitRadius, delay, duration }: { 
 );
 
 const TypewriterText = ({ texts }: { texts: string[] }) => {
-  const [idx, setIdx] = useState(0);
-  const [char, setChar] = useState(0);
-  const [dir, setDir] = useState<1 | -1>(1);
+  const elRef = useRef<HTMLSpanElement>(null);
+  const stateRef = useRef({ idx: 0, char: 0, dir: 1 as 1 | -1 });
 
   useEffect(() => {
-    let pauseTimer: ReturnType<typeof setTimeout> | undefined;
-    const t = setTimeout(() => {
-      if (dir === 1) {
-        if (char >= texts[idx].length) {
-          pauseTimer = setTimeout(() => setDir(-1), 2000);
-        } else {
-          setChar(c => c + 1);
+    let timer: ReturnType<typeof setTimeout>;
+    const tick = () => {
+      const s = stateRef.current;
+      const el = elRef.current;
+      if (!el) return;
+      if (s.dir === 1) {
+        if (s.char >= texts[s.idx].length) {
+          timer = setTimeout(() => { s.dir = -1; tick(); }, 2000);
+          return;
         }
+        s.char++;
       } else {
-        if (char <= 0) {
-          setDir(1);
-          setIdx(i => (i + 1) % texts.length);
+        if (s.char <= 0) {
+          s.dir = 1;
+          s.idx = (s.idx + 1) % texts.length;
         } else {
-          setChar(c => c - 1);
+          s.char--;
         }
       }
-    }, dir === 1 ? 60 : 20);
-    return () => {
-      clearTimeout(t);
-      if (pauseTimer) clearTimeout(pauseTimer);
+      el.textContent = texts[s.idx].substring(0, s.char);
+      timer = setTimeout(tick, s.dir === 1 ? 60 : 20);
     };
-  }, [char, dir, idx, texts]);
+    timer = setTimeout(tick, 500);
+    return () => clearTimeout(timer);
+  }, [texts]);
 
-  return (
-    <span className="typing-cursor">
-      {texts[idx].substring(0, char)}
-    </span>
-  );
+  return <span ref={elRef} className="typing-cursor" />;
 };
 
 const ContributionHeatmap = () => {
@@ -244,11 +242,7 @@ export default function Home({ setActivePage }: Props) {
             scrollActive ? "opacity-0 translate-y-2 pointer-events-none" : "opacity-100 translate-y-0"
           }`}>
             <span className="relative flex h-8 w-5 items-start justify-center rounded-full border-2 border-white/25 py-1.5">
-              <motion.span
-                animate={{ y: [0, 8, 0] }}
-                transition={{ duration: 1.5, repeat: Infinity, ease: "easeInOut" }}
-                className="h-1.5 w-1.5 rounded-full bg-cyan-400"
-              />
+              <span className="h-1.5 w-1.5 rounded-full bg-cyan-400 animate-bounce-y" />
             </span>
             <span>Scroll Down</span>
           </div>
@@ -432,10 +426,8 @@ export default function Home({ setActivePage }: Props) {
       <motion.div variants={i} className="relative overflow-hidden w-full py-2 sm:py-3 z-10">
         <div className="absolute inset-y-0 left-0 w-8 sm:w-16 bg-gradient-to-r from-[#050816] to-transparent z-10 pointer-events-none" />
         <div className="absolute inset-y-0 right-0 w-8 sm:w-16 bg-gradient-to-l from-[#050816] to-transparent z-10 pointer-events-none" />
-        <motion.div
-          className="flex gap-6 sm:gap-10 items-center"
-          animate={{ x: ["0%", "-50%"] }}
-          transition={{ duration: 40, repeat: Infinity, ease: "linear" }}
+        <div className="flex gap-6 sm:gap-10 items-center animate-marquee"
+          style={{ width: "fit-content" }}
         >
           {[
             { name: "Java", slug: "java" },
@@ -479,7 +471,7 @@ export default function Home({ setActivePage }: Props) {
               <span className="text-[10px] sm:text-xs font-semibold text-text-secondary group-hover/ticker:text-white transition-colors">{s.name}</span>
             </div>
           ))}
-        </motion.div>
+        </div>
       </motion.div>
 
       <motion.div variants={i} className="grid grid-cols-1 lg:grid-cols-12 gap-4 sm:gap-5 lg:gap-6 w-full items-stretch relative z-10">
