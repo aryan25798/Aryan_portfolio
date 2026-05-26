@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useRef } from "react";
 import { motion } from "framer-motion";
 import { ArrowRight, Eye, Terminal, Code, Star, ExternalLink, BookOpen, Zap, MessageSquare } from "lucide-react";
 import Image from "next/image";
@@ -149,15 +149,20 @@ const ContributionHeatmap = () => {
 
 export default function Home({ setActivePage }: Props) {
   const [scrollActive, setScrollActive] = useState(false);
-  const [mousePos, setMousePos] = useState({ x: 0.5, y: 0.5 });
   const [showResume, setShowResume] = useState(false);
+  const pedestalGlowRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
     const handleScroll = () => {
       setScrollActive(window.scrollY > 100);
     };
     const handleMouse = (e: MouseEvent) => {
-      setMousePos({ x: e.clientX / window.innerWidth, y: e.clientY / window.innerHeight });
+      const el = pedestalGlowRef.current;
+      if (el) {
+        const x = (e.clientX / window.innerWidth) * 100;
+        const y = (e.clientY / window.innerHeight) * 100;
+        el.style.background = `radial-gradient(circle at ${x}% ${y}%, rgba(124,58,237,0.2), rgba(6,182,212,0.1), transparent)`;
+      }
     };
     window.addEventListener("scroll", handleScroll);
     window.addEventListener("mousemove", handleMouse);
@@ -258,9 +263,10 @@ export default function Home({ setActivePage }: Props) {
           
           <div className="relative w-[180px] h-[240px] xs:w-[250px] xs:h-[330px] sm:w-[300px] sm:h-[390px] lg:w-[340px] lg:h-[440px] flex items-end justify-center z-10 -mt-2 xs:-mt-4 sm:-mt-6 max-w-full overflow-hidden">
             <div
+              ref={pedestalGlowRef}
               className="absolute inset-0 rounded-full opacity-30 blur-3xl"
               style={{
-                background: `radial-gradient(circle at ${mousePos.x * 100}% ${mousePos.y * 100}%, rgba(124,58,237,0.2), rgba(6,182,212,0.1), transparent)`,
+                background: `radial-gradient(circle at 50% 50%, rgba(124,58,237,0.2), rgba(6,182,212,0.1), transparent)`,
                 transition: "background 0.3s ease-out",
               }}
             />

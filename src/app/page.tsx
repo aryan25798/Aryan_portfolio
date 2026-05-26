@@ -1,6 +1,6 @@
 "use client";
  
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useRef } from "react";
 import { AnimatePresence, motion } from "framer-motion";
 import { ArrowUp } from "lucide-react";
 import BackgroundEffect from "@/components/BackgroundEffect";
@@ -23,9 +23,9 @@ const variants = {
  
 export default function Page() {
   const [activePage, setActivePage] = useState("home");
-  const [mousePos, setMousePos] = useState({ x: 0, y: 0 });
   const [showTop, setShowTop] = useState(false);
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
+  const glowRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
     const params = new URLSearchParams(window.location.search);
@@ -43,7 +43,12 @@ export default function Page() {
   }, [activePage]);
 
   useEffect(() => {
-    const onMouse = (e: MouseEvent) => setMousePos({ x: e.clientX, y: e.clientY });
+    const onMouse = (e: MouseEvent) => {
+      const el = glowRef.current;
+      if (el) {
+        el.style.background = `radial-gradient(600px circle at ${e.clientX}px ${e.clientY}px, rgba(124,58,237,0.04), transparent 60%)`;
+      }
+    };
     const onScroll = () => setShowTop(window.scrollY > 400);
     window.addEventListener("mousemove", onMouse);
     window.addEventListener("scroll", onScroll);
@@ -72,9 +77,10 @@ export default function Page() {
       <BackgroundEffect />
 
       <div
+        ref={glowRef}
         className="pointer-events-none fixed inset-0 z-30 hidden md:block"
         style={{
-          background: `radial-gradient(600px circle at ${mousePos.x}px ${mousePos.y}px, rgba(124,58,237,0.04), transparent 60%)`,
+          background: `radial-gradient(600px circle at -1000px -1000px, rgba(124,58,237,0.04), transparent 60%)`,
           transition: "background 0.15s ease-out",
         }}
       />

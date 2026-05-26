@@ -167,8 +167,10 @@ export default function BackgroundEffect() {
           const p2 = particles[j];
           const dx2 = p.x - p2.x;
           const dy2 = p.y - p2.y;
-          const dist2 = Math.sqrt(dx2 * dx2 + dy2 * dy2);
-          if (dist2 < connDist) {
+          const distSq = dx2 * dx2 + dy2 * dy2;
+          const connDistSq = connDist * connDist;
+          if (distSq < connDistSq) {
+            const dist2 = Math.sqrt(distSq);
             const alpha = 0.06 * (1 - dist2 / connDist);
             ctx.beginPath();
             ctx.moveTo(p.x, p.y);
