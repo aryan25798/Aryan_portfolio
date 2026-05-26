@@ -267,9 +267,9 @@ export default function BackgroundEffect() {
     <div className="fixed inset-0 z-0 overflow-hidden pointer-events-none select-none">
       <div className="absolute inset-0" style={{ background: "linear-gradient(180deg, #050816 0%, #080b22 50%, #050816 100%)" }} />
 
-      <div className="absolute top-[15%] left-[10%] w-[400px] sm:w-[600px] lg:w-[800px] h-[400px] sm:h-[600px] lg:h-[800px] rounded-full animate-aurora" style={{ background: "radial-gradient(circle, rgba(124,58,237,0.08) 0%, rgba(59,130,246,0.03) 30%, transparent 60%)", filter: "blur(80px)" }} />
-      <div className="absolute top-[40%] right-[5%] w-[350px] sm:w-[500px] lg:w-[700px] h-[350px] sm:h-[500px] lg:h-[700px] rounded-full animate-aurora-reverse" style={{ background: "radial-gradient(circle, rgba(6,182,212,0.06) 0%, rgba(59,130,246,0.02) 35%, transparent 60%)", filter: "blur(70px)" }} />
-      <div className="absolute bottom-[10%] left-[30%] w-[300px] sm:w-[400px] lg:w-[600px] h-[300px] sm:h-[400px] lg:h-[600px] rounded-full animate-aurora" style={{ background: "radial-gradient(circle, rgba(168,85,247,0.05) 0%, rgba(124,58,237,0.02) 30%, transparent 55%)", filter: "blur(90px)", animationDelay: "-4s" }} />
+      <div className="absolute top-[15%] left-[10%] w-[400px] sm:w-[600px] lg:w-[800px] h-[400px] sm:h-[600px] lg:h-[800px] rounded-full animate-aurora" style={{ background: "radial-gradient(circle, rgba(124,58,237,0.1) 0%, rgba(59,130,246,0.02) 40%, transparent 80%)" }} />
+      <div className="absolute top-[40%] right-[5%] w-[350px] sm:w-[500px] lg:w-[700px] h-[350px] sm:h-[500px] lg:h-[700px] rounded-full animate-aurora-reverse" style={{ background: "radial-gradient(circle, rgba(6,182,212,0.08) 0%, rgba(59,130,246,0.02) 40%, transparent 80%)" }} />
+      <div className="absolute bottom-[10%] left-[30%] w-[300px] sm:w-[400px] lg:w-[600px] h-[300px] sm:h-[400px] lg:h-[600px] rounded-full animate-aurora" style={{ background: "radial-gradient(circle, rgba(168,85,247,0.06) 0%, rgba(124,58,237,0.02) 40%, transparent 80%)", animationDelay: "-4s" }} />
 
       <canvas ref={starCanvasRef} className="absolute inset-0 w-full h-full" style={{ zIndex: 1 }} />
 

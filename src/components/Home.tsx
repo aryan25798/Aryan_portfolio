@@ -264,9 +264,9 @@ export default function Home({ setActivePage }: Props) {
           <div className="relative w-[180px] h-[240px] xs:w-[250px] xs:h-[330px] sm:w-[300px] sm:h-[390px] lg:w-[340px] lg:h-[440px] flex items-end justify-center z-10 -mt-2 xs:-mt-4 sm:-mt-6 max-w-full overflow-hidden">
             <div
               ref={pedestalGlowRef}
-              className="absolute inset-0 rounded-full opacity-30 blur-3xl"
+              className="absolute inset-0 rounded-full opacity-30"
               style={{
-                background: `radial-gradient(circle at 50% 50%, rgba(124,58,237,0.2), rgba(6,182,212,0.1), transparent)`,
+                background: `radial-gradient(circle at 50% 50%, rgba(124,58,237,0.3) 0%, rgba(6,182,212,0.15) 50%, transparent 80%)`,
                 transition: "background 0.3s ease-out",
               }}
             />
