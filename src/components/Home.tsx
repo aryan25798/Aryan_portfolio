@@ -432,7 +432,7 @@ export default function Home({ setActivePage }: Props) {
           {[
             { name: "Java", slug: "java" },
             { name: "React", slug: "react" },
-            { name: "AWS", slug: "amazonwebservices" },
+            { name: "AWS", slug: "amazonaws" },
             { name: "Spring Boot", slug: "springboot" },
             { name: "Docker", slug: "docker" },
             { name: "Apache Kafka", slug: "apachekafka" },
@@ -449,7 +449,7 @@ export default function Home({ setActivePage }: Props) {
           ].concat([
             { name: "Java", slug: "java" },
             { name: "React", slug: "react" },
-            { name: "AWS", slug: "amazonwebservices" },
+            { name: "AWS", slug: "amazonaws" },
             { name: "Spring Boot", slug: "springboot" },
             { name: "Docker", slug: "docker" },
             { name: "Apache Kafka", slug: "apachekafka" },
@@ -515,7 +515,7 @@ export default function Home({ setActivePage }: Props) {
                   { name: "Node.js", slug: "nodedotjs" },
                   { name: "MongoDB", slug: "mongodb" },
                   { name: "Tailwind", slug: "tailwindcss" },
-                  { name: "AWS", slug: "amazonwebservices" },
+                  { name: "AWS", slug: "amazonaws" },
                 ].map((tech, idx) => (
                   <div key={idx} className="flex flex-col items-center gap-1 group/tile w-[68px] xs:w-[76px] sm:w-[84px] flex-shrink-0">
                     <div className="w-9 h-9 xs:w-10 xs:h-10 sm:w-12 sm:h-12 rounded-xl bg-black/60 border border-white/10 flex items-center justify-center transition-all duration-300 group-hover/tile:scale-110 group-hover/tile:border-purple-500/40 group-hover/tile:-translate-y-1 group-hover/tile:shadow-[0_0_20px_rgba(124,58,237,0.3)] shadow-lg">

@@ -4,32 +4,19 @@
 import { useState } from "react";
 
 export default function SkillIcon({ slug, name, className = "w-full h-full" }: { slug: string; name: string; className?: string }) {
-  const [useFallback, setUseFallback] = useState(false);
-  const [err, setErr] = useState(false);
+  const [failed, setFailed] = useState(false);
 
-  if (err) {
+  if (failed) {
     return <span className="text-[10px] sm:text-xs font-black text-white/80">{name[0]}</span>;
-  }
-
-  if (useFallback) {
-    return (
-      <img
-        src={`https://cdn.jsdelivr.net/npm/simple-icons@latest/icons/${slug}.svg`}
-        alt={name}
-        className={`${className} brightness-0 invert`}
-        loading="lazy"
-        onError={() => setErr(true)}
-      />
-    );
   }
 
   return (
     <img
-      src={`https://cdn.simpleicons.org/${slug}/white`}
+      src={`https://cdn.jsdelivr.net/npm/simple-icons@latest/icons/${slug}.svg`}
       alt={name}
-      className={className}
+      className={`${className} brightness-0 invert`}
       loading="lazy"
-      onError={() => setUseFallback(true)}
+      onError={() => setFailed(true)}
     />
   );
 }

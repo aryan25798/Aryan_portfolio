@@ -37,7 +37,7 @@ const skillData = [
   { n: "MongoDB", l: "Expert", c: "databases", col: "text-emerald-500", g: "#10b981", slug: "mongodb" },
   { n: "PostgreSQL", l: "Advanced", c: "databases", col: "text-blue-400", g: "#3b82f6", slug: "postgresql" },
   { n: "Redis", l: "Expert", c: "databases", col: "text-red-500", g: "#ef4444", slug: "redis" },
-  { n: "AWS", l: "Expert", c: "cloud", col: "text-orange-400", g: "#f97316", slug: "amazonwebservices" },
+  { n: "AWS", l: "Expert", c: "cloud", col: "text-orange-400", g: "#f97316", slug: "amazonaws" },
   { n: "Docker", l: "Expert", c: "cloud", col: "text-blue-400", g: "#3b82f6", slug: "docker" },
   { n: "Kubernetes", l: "Advanced", c: "cloud", col: "text-blue-500", g: "#3b82f6", slug: "kubernetes" },
   { n: "Apache Kafka", l: "Expert", c: "cloud", col: "text-purple-400", g: "#a855f7", slug: "apachekafka" },
